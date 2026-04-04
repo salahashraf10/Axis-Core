@@ -3,281 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allianz Core</title>
+    <title>Axis Core </title>
+    <meta name="description" content="Axis Core – شركة هندسة برمجية في مصر، نقدم أنظمة سحابية، واجهات مستخدم، وأمن سيبراني. تأسست على يد المهندس صلاح أشرف.">
+    <meta name="keywords" content="هندسة برمجية, تطوير مواقع, أنظمة سحابية, أمن سيبراني, Axis Core, شركة برمجيات مصر, صلاح أشرف">
+    <meta name="author" content="صلاح أشرف">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link rel="icon" type="image/png" href="favicon.png">
-    <meta property="og:title" content="Allianz Core - هندسة برمجية تُصاغ لواقع الأعمال">
+    <meta property="og:title" content="Axis Core - هندسة برمجية تُصاغ لواقع الأعمال">
     <meta property="og:description" content="نحن نعيد صياغة مستقبل البرمجيات بلمسة ذهبية وأكواد متقنة. انتظرونا يوم 4/4/2026.">
     <meta property="og:image" content="favicon.png"> 
-    <meta property="og:url" content="https://allianz-core-official.netlify.app/">
+    <meta property="og:url" content="https://axis-core-official.netlify.app/">
     <meta property="og:type" content="website">
+    <style>
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: var(--card-bg);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 35px 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.3s ease;
+        }
+        .popup-content i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .popup-content h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .popup-content p {
+            color: var(--text-silver);
+            margin-bottom: 25px;
+        }
+        .popup-close {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .popup-close:hover {
+            transform: scale(1.05);
+            background: #ffd966;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            padding: 6px 15px;
+            cursor: pointer;
+            color: var(--gold);
+            font-weight: bold;
+            transition: 0.3s;
+            margin-right: 15px;
+        }
+        .lang-toggle:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        /* تنسيق كروت الموظفين */
+        .employee-card {
+            background: linear-gradient(145deg, #0f0f0f, #080808);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            width: 260px;
+        }
+        .employee-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.2);
+        }
+        .employee-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .employee-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .employee-avatar i {
+            font-size: 3rem;
+            color: var(--gold);
+        }
+        .employee-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+        .employee-name-en {
+            font-size: 0.85rem;
+            color: var(--text-silver);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .employee-title {
+            font-size: 0.9rem;
+            color: #fff;
+            background: rgba(212, 175, 55, 0.15);
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+        }
+        .employee-role {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        .employee-nationality {
+            font-size: 0.8rem;
+            color: #aaa;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+        }
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        /* أيقونة الوضع الليلي/النهاري */
+        .theme-toggle-icon {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .theme-toggle-icon:hover {
+            background: var(--gold);
+            color: #000;
+            transform: rotate(15deg);
+        }
+        /* خريطة العالم كخلفية */
+        .hero {
+            position: relative;
+            overflow: hidden;
+        }
+        .world-map-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.08;
+            pointer-events: none;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
-
 <body>
 
-    <a href="https://wa.me/201554561706?text=أهلاً%20Allianz%20Core%20أريد%20طلب%20استشارة%20تقنية%20بخصوص%20مشروعي" class="floating-btn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-        <span>طلب استشارة تقنية</span>
-    </a>
+<div id="preloader">
+    <div class="loader-logo">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="letter-path" d="M30 70 L50 20 L70 70 L60 70 L50 40 L40 70 L30 70Z" stroke="#d4af37" stroke-width="3" fill="none"/>
+            <path class="letter-path" d="M45 55 L55 55" stroke="#d4af37" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <p class="loader-text">Axis Core</p>
+    </div>
+</div>
 
-    <div class="countdown-banner">
-        <div class="banner-title">الانطلاق الرسمي لـ <span class="gold-text">Allianz Core</span> بعد: 
-            <span id="countdown">00:00:00:00</span>
+<div class="site-content" style="display: none;">
+    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="beta-bar" id="betaBar">
+        <div class="container">
+            <span class="beta-text">⚡ فترة التشغيل التجريبي | من 4 أبريل حتى 5 مايو 2026</span>
+            <span class="beta-note">نرحب بملاحظاتكم استعدادًا للإطلاق الرسمي</span>
+            <button class="beta-close" id="closeBetaBar">✕</button>
         </div>
     </div>
-
-    <header>
+    <div class="system-health">
+        <div class="container">
+            <div class="status-indicator"><span class="live-dot"></span><span class="status-text">All Systems Operational</span></div>
+            <div class="uptime"><i class="fas fa-chart-line"></i><span>Uptime: 99.9%</span></div>
+        </div>
+    </div>
+    <a href="https://wa.me/201554561706?text=أهلاً%20Axis%20Core%20أريد%20طلب%20استشارة%20تقنية%20بخصوص%20مشروعي" class="floating-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i><span>طلب استشارة تقنية</span>
+    </a>
+    <div class="countdown-banner">
+        <div class="banner-title">مرحبا بكم في المستقبل</div>
+    </div>
+    <header id="mainHeader">
         <nav class="container">
             <div class="logo">
-                <span class="gold-text">Allianz</span> Core
+                <img src="logo.png" alt="Axis Core Logo" class="logo-img">
+                <span class="gold-text">Axis</span> Core
             </div>
             <ul class="nav-links">
-                <li><a href="#home">الرئيسية</a></li>
-                <li><a href="#about">عن المؤسسة</a></li>
-                <li><a href="#solutions">الحلول</a></li>
-                <li><a href="#portfolio">أعمالنا</a></li>
+                <li><a href="index.html" class="active-page">الرئيسية</a></li>
+                <li><a href="about.html">من نحن</a></li>
+                <li><a href="javascript:void(0)" onclick="showWorksPopup()">أعمالنا</a></li>
+                <li><a href="blog.html">مدونة</a></li>
+                <li><a href="javascript:void(0)" onclick="showAcademyPopup()">Academy</a></li>
             </ul>
+            <button id="langToggle" class="lang-toggle" onclick="showLangPopup()">AR / EN</button>
+            <button id="themeToggleIcon" class="theme-toggle-icon" onclick="showThemePopup()">
+                <i class="fas fa-moon"></i>
+            </button>
         </nav>
     </header>
-
+    <div id="particles-bg"></div>
+    
     <section id="home" class="hero">
+        <svg class="world-map-bg" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M150,150 Q200,100 300,120 Q400,140 450,100 Q500,60 600,80 Q700,100 750,150" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M100,250 Q200,220 300,240 Q400,260 500,230 Q600,200 700,220" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M120,350 Q250,320 350,340 Q450,360 550,330 Q650,300 750,320" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <circle cx="180" cy="200" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="300" cy="280" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="500" cy="150" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="650" cy="250" r="2" fill="currentColor" opacity="0.6"/>
+            <circle cx="400" cy="380" r="2" fill="currentColor" opacity="0.6"/>
+        </svg>
+        
         <div class="container">
             <h1 class="hero-title">هندسةٌ برمجيةٌ متكاملة.. <br><span class="gold-text">تُصاغُ لواقعِ الأعمال</span></h1>
             <p class="hero-subtitle">نحن لا نبرمج فحسب؛ نحن نبني الأنظمة التي تقود مؤسستكم نحو الريادة الرقمية العالمية.</p>
         </div>
     </section>
-
+    
     <section id="about" class="section-padding">
         <div class="container">
             <h2 class="section-title">عن المؤسسة</h2>
             <div class="grid-layout">
-                <div class="standard-card">
-                    <i class="fas fa-eye gold-text"></i>
-                    <h3>رؤيتنا</h3>
-                    <p>قيادة التحول الرقمي في الشرق الأوسط عبر ابتكار أنظمة برمجية تتجاوز التوقعات، ووضع معايير جديدة للجودة.</p>
-                </div>
-                <div class="standard-card">
-                    <i class="fas fa-history gold-text"></i>
-                    <h3>تاريخنا</h3>
-                    <p>تأسست Allianz Core لتكون المظلة التقنية لمشاريع المستقبل، منطلقة من قلب القاهرة لخدمة الطموحات العالمية.</p>
+                <div class="standard-card"><i class="fas fa-eye gold-text"></i><h3>رؤيتنا</h3><p>قيادة التحول الرقمي في الشرق الأوسط عبر ابتكار أنظمة برمجية تتجاوز التوقعات، ووضع معايير جديدة للجودة.</p></div>
+                <div class="standard-card"><i class="fas fa-history gold-text"></i><h3>تاريخنا</h3><p>تأسست Axis Core لتكون المظلة التقنية لمشاريع المستقبل، منطلقة من قلب القاهرة لخدمة الطموحات العالمية.</p></div>
+            </div>
+        </div>
+    </section>
+    <section id="architect-core" class="section-padding">
+        <div class="container">
+            <div class="architect-wrapper">
+                <div class="architect-visual"><div class="code-mesh"><div class="mesh-line"></div><div class="mesh-line"></div><div class="mesh-line"></div><div class="core-node"><i class="fas fa-microchip gold-text"></i></div></div></div>
+                <div class="architect-content">
+                    <span class="special-tag gold-text">هندسة برمجية.. تُصاغ بعقلِ مهندس</span>
+                    <h2 class="section-title-left">القوة الدافعة خلف كل كود</h2>
+                    <p class="architect-description">"في Axis Core، نحن لا نبرمج فحسب؛ نحن نبني الهياكل الرقمية التي تقود مستقبل أعمالكم. كل سطر برمجي هو جزء من منظومة معمارية متكاملة، يشرف عليها **صلاح أشرف** شخصياً.. لضمان أن كل تفصيلة تقنية تخدم رؤيتك الاستراتيجية بأعلى معايير الجودة العالمية."</p>
+                    <div class="signature-line"><span class="designer-name">SALA</span>H ASHRAF <small>Founder & Software Strategist</small></div>
                 </div>
             </div>
         </div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-<section id="architect-core" class="section-padding">
-    <div class="container">
-        <div class="architect-wrapper">
-            <div class="architect-visual">
-                <div class="code-mesh">
-                    <div class="mesh-line"></div>
-                    <div class="mesh-line"></div>
-                    <div class="mesh-line"></div>
-                    <div class="core-node">
-                        <i class="fas fa-microchip gold-text"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="architect-content">
-                <span class="special-tag gold-text">هندسة برمجية.. تُصاغ بعقلِ مهندس</span>
-                <h2 class="section-title-left">القوة الدافعة خلف كل كود</h2>
-                <p class="architect-description">
-                    "في Allianz Core، نحن لا نبرمج فحسب؛ نحن نبني الهياكل الرقمية التي تقود مستقبل أعمالكم. كل سطر بركدي هو جزء من منظومة معمارية متكاملة، يشرف عليها **صلاح أشرف** شخصياً.. لضمان أن كل تفصيلة تقنية تخدم رؤيتك الاستراتيجية بأعلى معايير الجودة العالمية."
-                </p>
-                <div class="signature-line">
-                    <span class="designer-name">SALA</span>H ASHRAF
-                    <small>   Founder & Software Strategist        </small>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <section class="section-padding code-viewer-section">
+        <div class="container"><div class="code-viewer"><pre class="code-content" id="dynamic-code"><code id="code-text"></code></pre></div></div>
+    </section>
     <section id="solutions" class="section-padding dark-bg">
         <div class="container">
             <h2 class="section-title">حلول الشركات</h2>
             <div class="grid-layout">
-                <div class="standard-card">
-                    <i class="fas fa-cloud gold-text"></i>
-                    <h3>الأنظمة السحابية</h3>
-                    <p>بناء قواعد بيانات وأنظمة إدارة خلفية قوية تضمن استقرار أعمالكم الضخمة.</p>
+                <div class="standard-card"><i class="fas fa-cloud gold-text"></i><h3>الأنظمة السحابية</h3><p>بناء قواعد بيانات وأنظمة إدارة خلفية قوية تضمن استقرار أعمالكم الضخمة.</p></div>
+                <div class="standard-card"><i class="fas fa-laptop-code gold-text"></i><h3>واجهات المستخدم</h3><p>تصميم واجهات تفاعلية تمنح عملاءكم تجربة استخدام عالمية وسلسة.</p></div>
+                <div class="standard-card"><i class="fas fa-user-shield gold-text"></i><h3>الأمن السيبراني</h3><p>تأمين الكود ضد الثغرات لضمان خصوصية بياناتكم.</p></div>
+                <div class="standard-card"><i class="fas fa-shopping-cart gold-text"></i><h3>متاجر إلكترونية</h3><p>منصات تسوق احترافية تدير مبيعاتك بكل سهولة وأمان، مع بوابات دفع متكاملة وتجربة مستخدم سلسة.</p></div>
+                <div class="standard-card"><i class="fas fa-rocket gold-text"></i><h3>تطبيقات ويب تفاعلية</h3><p>تطبيقات سريعة وذكية تعمل في المتصفح، توفر تجربة مستخدم استثنائية تشبه البرامج التقليدية.</p></div>
+                <div class="standard-card"><i class="fas fa-chart-line gold-text"></i><h3>تحسين SEO وأداء</h3><p>نضمن ظهور موقعك في الصفحات الأولى لمحركات البحث مع سرعة فائقة في التحميل لتحسين تجربة المستخدم.</p></div>
+                <div class="standard-card"><i class="fas fa-server gold-text"></i><h3>استضافة وإدارة</h3><p>استضافة آمنة وإدارة كاملة للموقع مع تحديثات مستمرة ومراقبة على مدار الساعة.</p></div>
+            </div>
+        </div>
+    </section>
+    <section class="section-padding impact-section">
+        <div class="container">
+            <h2 class="section-title">أهدافنا الطموحة</h2>
+            <div class="impact-grid">
+                <div class="impact-card"><div class="impact-number" id="codeTarget">0</div><div class="impact-label">نسعى لكتابة أكثر من 50,000 سطر كود نظيف</div></div>
+                <div class="impact-card"><div class="impact-number" id="projectsTarget">0</div><div class="impact-label">نطمح لتنفيذ أكثر من 25 مشروعًا متكاملاً</div></div>
+                <div class="impact-card"><div class="impact-number" id="clientsTarget">0</div><div class="impact-label">نستهدف خدمة أكثر من 20 عميلًا في المرحلة الأولى</div></div>
+            </div>
+        </div>
+    </section>
+    <section id="partners" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">شركاء النجاح</h2>
+            <p style="text-align:center; color:var(--text-silver); margin-top:-40px; margin-bottom:50px;">نفتخر بالتعاون مع كيانات رائدة تضع ثقتها في رؤيتنا التقنية.</p>
+            <div class="partners-grid">
+                <div class="partner-item"><div class="partner-logo"><span class="gold-text">SalaH</span> B.U.G</div><div class="partner-name">Business United Global</div></div>
+                <div class="partner-item"><div class="partner-logo"><span class="gold-text">BVB</span> NILE EGYPT</div><div class="partner-name">The Official Fan Club</div></div>
+            </div>
+        </div>
+    </section>
+    <section id="team-soon" class="section-padding dark-bg">
+        <div class="container">
+            <h2 class="section-title">فريق النخبة <span class="gold-text">Axis Core</span></h2>
+            <p style="text-align:center; color:var(--text-silver); margin-top:-40px; margin-bottom:50px;">نخبة من المهندسين المتخصصين في تطوير الويب</p>
+            <div class="team-grid">
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <img src="BAHA.png" alt="بهاء الدين">
+                    </div>
+                    <h3 class="employee-name">بهاء الدين</h3>
+                    <div class="employee-name-en">Bahaa El-Din</div>
+                    <div class="employee-title">Programmer</div>
+                    <div class="employee-role">Frontend</div>
+                    <div class="employee-nationality">🇵🇸 فلسطيني</div>
                 </div>
-                <div class="standard-card">
-                    <i class="fas fa-laptop-code gold-text"></i>
-                    <h3>واجهات المستخدم</h3>
-                    <p>تصميم واجهات تفاعلية تمنح عملاءكم تجربة استخدام عالمية وسلسة.</p>
-                </div>
-                <div class="standard-card">
-                    <i class="fas fa-user-shield gold-text"></i>
-                    <h3>الأمن السيبراني</h3>
-                    <p>تأمين الكود ضد الثغرات لضمان خصوصية بياناتكم.</p>
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <img src="abdallah.png" alt="عبد الله حطب">
+                    </div>
+                    <h3 class="employee-name">عبد الله حطب</h3>
+                    <div class="employee-name-en">Abdullah Hatab</div>
+                    <div class="employee-title">Programmer</div>
+                    <div class="employee-role">Frontend</div>
+                    <div class="employee-nationality">🇸🇾 سوري</div>
                 </div>
             </div>
         </div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<section id="partners" class="section-padding">
-    <div class="container">
-        <h2 class="section-title">شركاء النجاح</h2>
-        <p style="text-align: center; color: var(--text-silver); margin-top: -40px; margin-bottom: 50px;">
-            نفتخر بالتعاون مع كيانات رائدة تضع ثقتها في رؤيتنا التقنية.
-        </p>
-        
-        <div class="partners-grid">
-            <div class="partner-item">
-                <div class="partner-logo">
-                    <span class="gold-text">SalaH</span> B.U.G
-                </div>
-                <div class="partner-name">Business United Global</div>
-            </div>
-
-            <div class="partner-item">
-                <div class="partner-logo">
-                    <span class="gold-text">BVB</span> NILE EGYPT
-                </div>
-                <div class="partner-name">The Official Fan Club</div>
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <div class="faq-header"><h2 class="section-title">الأسئلة الشائعة</h2><p class="section-subtitle">إجابات تقنية حول معايير إنشاء وتطوير منصاتكم الرقمية</p></div>
+            <div class="faq-container">
+                <div class="faq-item"><div class="faq-question">ما الذي يميز خدمات تطوير المواقع في Axis Core? <i class="fas fa-plus"></i></div><div class="faq-answer"><p>نحن لا نكتفي بإنشاء صفحات ويب تقليدية؛ بل نبني منصات رقمية متكاملة بهندسة برمجية فريدة، يشرف عليها <strong>صلاح أشرف</strong> لضمان سرعة فائقة، حماية قصوى، وتجربة مستخدم عالمية تليق بهوية أعمالكم.</p></div></div>
+                <div class="faq-item"><div class="faq-question">هل المواقع التي يتم إنشاؤها متوافقة مع الهواتف الذكية ومحركات البحث? <i class="fas fa-plus"></i></div><div class="faq-answer"><p>بكل تأكيد؛ كل موقع نطلقه يتم برمجته يدوياً (Hand-coded) ليكون متوافقاً تماماً مع كافة الشاشات، ومُهيأً تقنياً لتصدر نتائج البحث (SEO)، مما يضمن وصول أعمالكم لأكبر شريحة ممكنة بأفضل أداء تقني.</p></div></div>
+                <div class="faq-item"><div class="faq-question">كيف يتم ضمان أمن الموقع وحمايته من الهجمات الرقمية? <i class="fas fa-plus"></i></div><div class="faq-answer"><p>الأمن هو أولويتنا القصوى؛ ندمج بروتوكولات الحماية المتقدمة داخل الكود الأساسي للموقع (Core Logic)، مما يجعله محصناً ضد الثغرات البرمجية الشائعة ومحاولات الاختراق، مع ضمان استقرار الخوادم على مدار الساعة.</p></div></div>
+                <div class="faq-item"><div class="faq-question">كيف يمكننا بدء رحلة التطوير الرقمي مع Axis Core? <i class="fas fa-plus"></i></div><div class="faq-answer"><p>تبدأ رحلتنا بجلسة استشارية استراتيجية لتحليل رؤيتكم ومتطلباتكم التقنية، ومن ثم نرسم الخارطة الهندسية الدقيقة التي تحول فكرتكم إلى واقع رقمي ملموس يتسم بالفخامة والاحترافية.</p></div></div>
             </div>
         </div>
-    </div>
-</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<section id="team-soon" class="section-padding dark-bg">
-    <div class="container">
-        <h2 class="section-title">فريق النخبة <span class="gold-text">Allianz Core</span></h2>
-        <p style="text-align: center; color: var(--text-silver); margin-top: -40px; margin-bottom: 50px;">
-            نحن ننتقي أعضاء فريقنا بعناية فائقة.. ترقبوا انضمام المبدعين.
-        </p>
-        
-        <div class="grid-layout">
-            <div class="soon-card">
-                <div class="soon-icon"><i class="fas fa-user-plus"></i></div>
-                <h3 class="gold-text">Senior Frontend Engineer</h3>
-                <span class="status-soon">COMING SOON</span>
-                <p>قيد التعاقد والاختيار لضمان أعلى جودة للواجهات.</p>
-            </div>
-
-            <div class="soon-card">
-                <div class="soon-icon"><i class="fas fa-user-shield"></i></div>
-                <h3 class="gold-text">Security Architect</h3>
-                <span class="status-soon">COMING SOON</span>
-                <p>قيد التجهيز لتأمين كافة الأنظمة البرمجية للمؤسسة.</p>
-            </div>
-
-            <div class="soon-card">
-                <div class="soon-icon"><i class="fas fa-server"></i></div>
-                <h3 class="gold-text">Backend Specialist</h3>
-                <span class="status-soon">COMING SOON</span>
-                <p>المقعد محجوز لخبير هندسة النظم المعقدة.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-
-
-
-<section id="faq" class="section-padding">
-    <div class="container">
-        <div class="faq-header">
-            <h2 class="section-title">الأسئلة الشائعة</h2>
-            <p class="section-subtitle">إجابات تقنية حول معايير إنشاء وتطوير منصاتكم الرقمية</p>
-        </div>
-
-        <div class="faq-container">
-            <div class="faq-item">
-                <div class="faq-question">ما الذي يميز خدمات تطوير المواقع في Allianz Core؟ <i class="fas fa-plus"></i></div>
-                <div class="faq-answer">
-                    <p>نحن لا نكتفي بإنشاء صفحات ويب تقليدية؛ بل نبني منصات رقمية متكاملة بهندسة برمجية فريدة، يشرف عليها <strong>صلاح أشرف</strong> لضمان سرعة فائقة، حماية قصوى، وتجربة مستخدم عالمية تليق بهوية أعمالكم.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">هل المواقع التي يتم إنشاؤها متوافقة مع الهواتف الذكية ومحركات البحث؟ <i class="fas fa-plus"></i></div>
-                <div class="faq-answer">
-                    <p>بكل تأكيد؛ كل موقع نطلقه يتم برمجته يدوياً (Hand-coded) ليكون متوافقاً تماماً مع كافة الشاشات، ومُهيأً تقنياً لتصدر نتائج البحث (SEO)، مما يضمن وصول أعمالكم لأكبر شريحة ممكنة بأفضل أداء تقني.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">كيف يتم ضمان أمن الموقع وحمايته من الهجمات الرقمية؟ <i class="fas fa-plus"></i></div>
-                <div class="faq-answer">
-                    <p>الأمن هو أولويتنا القصوى؛ ندمج بروتوكولات الحماية المتقدمة داخل الكود الأساسي للموقع (Core Logic)، مما يجعله محصناً ضد الثغرات البرمجية الشائعة ومحاولات الاختراق، مع ضمان استقرار الخوادم على مدار الساعة.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">كيف يمكننا بدء رحلة التطوير الرقمي مع Allianz Core؟ <i class="fas fa-plus"></i></div>
-                <div class="faq-answer">
-                    <p>تبدأ رحلتنا بجلسة استشارية استراتيجية لتحليل رؤيتكم ومتطلباتكم التقنية، ومن ثم نرسم الخارطة الهندسية الدقيقة التي تحول فكرتكم إلى واقع رقمي ملموس يتسم بالفخامة والاحترافية.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
+    </section>
     <footer>
         <div class="container">
-            <p>&copy; 2026 جميع الحقوق محفوظة لشركة Allianz Core</p>
+            <img src="logo.png" alt="Axis Core Logo" class="footer-logo">
+            <p>&copy; 2026 جميع الحقوق محفوظة لشركة Axis Core</p>
         </div>
     </footer>
+</div>
 
-    <script src="script.js"></script>
+<!-- نافذة أعمالنا -->
+<div id="worksPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-briefcase"></i>
+        <h3>أعمالنا قريبًا</h3>
+        <p>نستعد لعرض مشاريعنا المميزة. قريبًا جدًا ستجدون أعمالنا هنا. تابعونا!</p>
+        <button class="popup-close" onclick="closeWorksPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة اللغة -->
+<div id="langPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-language"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>سيتم إضافة الترجمة إلى الإنجليزية قريبًا. شكرًا لصبرك!</p>
+        <button class="popup-close" onclick="closeLangPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الأكاديمية -->
+<div id="academyPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>Axis Core Academy</h3>
+        <p>🚧 قيد التجهيز – سننطلق قريبًا.</p>
+        <p>تابعنا لمعرفة موعد الإطلاق!</p>
+        <button class="popup-close" onclick="closeAcademyPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الوضع الليلي/النهاري -->
+<div id="themePopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-adjust"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>هذه الميزة قيد التطوير، سيتم إتاحتها في الإصدارات القادمة.</p>
+        <button class="popup-close" onclick="closeThemePopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- ========== Beta Version Popup (تظهر كل مرة) ========== -->
+<div id="betaNoticePopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <i class="fas fa-flask"></i>
+        <h3>⚠️ نسخة تجريبية (Beta)</h3>
+        <p>أنت تستخدم النسخة التجريبية (Beta) من Axis Core.<br>
+        نرحب بملاحظاتك لتحسين التجربة قبل الإطلاق الرسمي في <strong>5 مايو</strong>.</p>
+        <button class="popup-close" id="betaNoticeCloseBtn">حسنًا</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="script.js"></script>
+<script>
+    // دوال النوافذ الحالية
+    function showWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'flex'; }
+    function closeWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'none'; }
+    function showLangPopup() { document.getElementById('langPopupOverlay').style.display = 'flex'; }
+    function closeLangPopup() { document.getElementById('langPopupOverlay').style.display = 'none'; }
+    function showAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'flex'; }
+    function closeAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'none'; }
+    function showThemePopup() { document.getElementById('themePopupOverlay').style.display = 'flex'; }
+    function closeThemePopup() { document.getElementById('themePopupOverlay').style.display = 'none'; }
+    
+    document.getElementById('worksPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeWorksPopup(); });
+    document.getElementById('langPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeLangPopup(); });
+    document.getElementById('academyPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeAcademyPopup(); });
+    document.getElementById('themePopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeThemePopup(); });
+    
+    // ========== دالة النافذة التجريبية (تظهر كل مرة بدون حفظ) ==========
+    function showBetaNotice() {
+        const popup = document.getElementById('betaNoticePopup');
+        const closeBtn = document.getElementById('betaNoticeCloseBtn');
+        
+        if (popup && closeBtn) {
+            popup.style.display = 'flex';
+            
+            closeBtn.onclick = function() {
+                popup.style.display = 'none';
+            };
+            
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        }
+    }
+    
+    // استدعاء النافذة بعد ما الصفحة تتحمل
+    window.addEventListener('DOMContentLoaded', function() {
+        showBetaNotice();
+    });
+</script>
 </body>
 </html>

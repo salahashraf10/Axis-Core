@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axis Core | من نحن</title>
+    <meta name="description" content="تعرف على Axis Core، شركة هندسة برمجية في مصر تأسست على يد المهندس صلاح أشرف. نقدم حلولاً تقنية متكاملة برؤية مستقبلية.">
+    <meta name="keywords" content="هندسة برمجية, من نحن, Axis Core, شركة برمجيات مصر, صلاح أشرف, رؤية ورسالة">
+    <meta name="author" content="صلاح أشرف">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: var(--card-bg);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 35px 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.3s ease;
+        }
+        .popup-content i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .popup-content h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .popup-content p {
+            color: var(--text-silver);
+            margin-bottom: 25px;
+        }
+        .popup-close {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .popup-close:hover {
+            transform: scale(1.05);
+            background: #ffd966;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            padding: 6px 15px;
+            cursor: pointer;
+            color: var(--gold);
+            font-weight: bold;
+            transition: 0.3s;
+            margin-right: 15px;
+        }
+        .lang-toggle:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        /* تنسيق كروت الموظفين */
+        .employee-card {
+            background: linear-gradient(145deg, #0f0f0f, #080808);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            width: 260px;
+        }
+        .employee-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.2);
+        }
+        .employee-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .employee-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .employee-avatar i {
+            font-size: 3rem;
+            color: var(--gold);
+        }
+        .employee-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+        .employee-name-en {
+            font-size: 0.85rem;
+            color: var(--text-silver);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .employee-title {
+            font-size: 0.9rem;
+            color: #fff;
+            background: rgba(212, 175, 55, 0.15);
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+        }
+        .employee-nationality {
+            font-size: 0.8rem;
+            color: #aaa;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+        }
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        /* أيقونة الوضع الليلي/النهاري */
+        .theme-toggle-icon {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .theme-toggle-icon:hover {
+            background: var(--gold);
+            color: #000;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+
+<div id="preloader">
+    <div class="loader-logo">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="letter-path" d="M30 70 L50 20 L70 70 L60 70 L50 40 L40 70 L30 70Z" stroke="#d4af37" stroke-width="3" fill="none"/>
+            <path class="letter-path" d="M45 55 L55 55" stroke="#d4af37" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <p class="loader-text">Axis Core</p>
+    </div>
+</div>
+
+<div class="site-content" style="display: none;">
+    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+    <header id="mainHeader">
+        <nav class="container">
+            <div class="logo"><span class="gold-text">Axis</span> Core</div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="about.html" class="active-page">من نحن</a></li>
+                <li><a href="index.html#solutions">الحلول</a></li>
+                <li><a href="javascript:void(0)" onclick="showWorksPopup()">أعمالنا</a></li>
+                <li><a href="blog.html">مدونة</a></li>
+                <li><a href="javascript:void(0)" onclick="showAcademyPopup()">Academy</a></li>
+            </ul>
+            <button id="langToggle" class="lang-toggle" onclick="showLangPopup()">AR / EN</button>
+            <button id="themeToggleIcon" class="theme-toggle-icon" onclick="showThemePopup()">
+                <i class="fas fa-moon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <section class="about-hero">
+        <div class="container">
+            <h1 class="about-title">من نحن</h1>
+            <p class="about-subtitle">شركة <span class="gold-text">Axis Core</span>.. حيث الهندسة البرمجية تلتقي برؤية مستقبلية</p>
+            <p class="about-description">تأسست على يد المهندس <strong>صلاح أشرف</strong> لنعيد تعريف معنى الجودة في عالم البرمجيات.</p>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="section-title">قصتنا</h2>
+            <div class="story-content">
+                <p>انطلقت Axis Core من قلب القاهرة بحلم بسيط: نقدم برمجيات لا تحتاج إلى إعادة كتابة.<br>
+                قررنا نجمع أفضل المبرمجين والمهندسين تحت مظلة واحدة، نؤمن بأن <strong class="gold-text">الكود النظيف</strong> هو أساس أي نظام متين، وأن <strong class="gold-text">الأمن</strong> ليس إضافة بل جوهر التصميم.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding dark-bg">
+        <div class="container">
+            <h2 class="section-title">رؤيتنا ورسالتنا وقيمنا</h2>
+            <div class="grid-layout">
+                <div class="standard-card">
+                    <i class="fas fa-eye gold-text"></i>
+                    <h3>رؤيتنا</h3>
+                    <p>قيادة التحول الرقمي في الشرق الأوسط عبر ابتكار أنظمة برمجية تتجاوز التوقعات، ووضع معايير جديدة للجودة.</p>
+                </div>
+                <div class="standard-card">
+                    <i class="fas fa-bullhorn gold-text"></i>
+                    <h3>رسالتنا</h3>
+                    <p>نقدم حلولًا برمجية متكاملة تجمع بين الإبداع والدقة، لنساعد عملاءنا على تحقيق أهدافهم بأعلى معايير الجودة.</p>
+                </div>
+                <div class="standard-card">
+                    <i class="fas fa-gem gold-text"></i>
+                    <h3>قيمنا</h3>
+                    <p>الالتزام، الإتقان، الشفافية، الابتكار. هذه المبادئ هي التي نبني عليها كل علاقة وكل سطر كود.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="section-title">فريق النخبة <span class="gold-text">Axis Core</span></h2>
+            <p class="section-subtitle">تحت إشراف شخصي من <strong class="gold-text">صلاح أشرف</strong></p>
+            <div class="team-grid">
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <img src="BAHA.png" alt="بهاء الدين">
+                    </div>
+                    <h3 class="employee-name">بهاء الدين</h3>
+                    <div class="employee-name-en">Bahaa El-Din</div>
+                    <div class="employee-title">Frontend Programmer</div>
+                    <div class="employee-nationality">🇵🇸 فلسطيني</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <img src="abdallah.png" alt="عبد الله حطب">
+                    </div>
+                    <h3 class="employee-name">عبد الله حطب</h3>
+                    <div class="employee-name-en">Abdullah Hatab</div>
+                    <div class="employee-title">Frontend Programmer </div>
+                    <div class="employee-nationality">🇸🇾 سوري</div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding dark-bg cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="section-title">جاهز تنطلق مع Axis Core؟</h2>
+                <a href="https://wa.me/201554561706?text=أهلاً%20Axis%20Core%20أريد%20طلب%20استشارة%20تقنية%20بخصوص%20مشروعي" class="cta-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer><div class="container"><p>&copy; 2026 جميع الحقوق محفوظة لشركة Axis Core</p></div></footer>
+</div>
+
+<!-- نافذة أعمالنا -->
+<div id="worksPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-briefcase"></i>
+        <h3>أعمالنا قريبًا</h3>
+        <p>نستعد لعرض مشاريعنا المميزة. قريبًا جدًا ستجدون أعمالنا هنا. تابعونا!</p>
+        <button class="popup-close" onclick="closeWorksPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة اللغة -->
+<div id="langPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-language"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>سيتم إضافة الترجمة إلى الإنجليزية قريبًا. شكرًا لصبرك!</p>
+        <button class="popup-close" onclick="closeLangPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الأكاديمية -->
+<div id="academyPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>Axis Core Academy</h3>
+        <p>🚧 قيد التجهيز – سننطلق قريبًا.</p>
+        <p>تابعنا لمعرفة موعد الإطلاق!</p>
+        <button class="popup-close" onclick="closeAcademyPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الوضع الليلي/النهاري -->
+<div id="themePopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-adjust"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>هذه الميزة قيد التطوير، سيتم إتاحتها في الإصدارات القادمة.</p>
+        <button class="popup-close" onclick="closeThemePopup()">حسنًا</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="script.js"></script>
+<script>
+    function showWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'flex'; }
+    function closeWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'none'; }
+    function showLangPopup() { document.getElementById('langPopupOverlay').style.display = 'flex'; }
+    function closeLangPopup() { document.getElementById('langPopupOverlay').style.display = 'none'; }
+    function showAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'flex'; }
+    function closeAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'none'; }
+    function showThemePopup() { document.getElementById('themePopupOverlay').style.display = 'flex'; }
+    function closeThemePopup() { document.getElementById('themePopupOverlay').style.display = 'none'; }
+    document.getElementById('worksPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeWorksPopup(); });
+    document.getElementById('langPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeLangPopup(); });
+    document.getElementById('academyPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeAcademyPopup(); });
+    document.getElementById('themePopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeThemePopup(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axis Core | مدونة تقنية</title>
+    <meta name="description" content="مدونة Axis Core التقنية – مقالات حول هندسة البرمجيات، تطوير الويب، الأمن السيبراني، وأفضل الممارسات البرمجية.">
+    <meta name="keywords" content="مدونة تقنية, هندسة برمجية, تطوير ويب, أمن سيبراني, Axis Core">
+    <meta name="author" content="صلاح أشرف">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: var(--card-bg);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 35px 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.3s ease;
+        }
+        .popup-content i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .popup-content h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .popup-content p {
+            color: var(--text-silver);
+            margin-bottom: 25px;
+        }
+        .popup-close {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .popup-close:hover {
+            transform: scale(1.05);
+            background: #ffd966;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            padding: 6px 15px;
+            cursor: pointer;
+            color: var(--gold);
+            font-weight: bold;
+            transition: 0.3s;
+            margin-right: 15px;
+        }
+        .lang-toggle:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        /* أيقونة الوضع الليلي/النهاري */
+        .theme-toggle-icon {
+            background: transparent;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .theme-toggle-icon:hover {
+            background: var(--gold);
+            color: #000;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+
+<div id="preloader">
+    <div class="loader-logo">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="letter-path" d="M30 70 L50 20 L70 70 L60 70 L50 40 L40 70 L30 70Z" stroke="#d4af37" stroke-width="3" fill="none"/>
+            <path class="letter-path" d="M45 55 L55 55" stroke="#d4af37" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <p class="loader-text">Axis Core</p>
+    </div>
+</div>
+
+<div class="site-content" style="display: none;">
+    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+    <header id="mainHeader">
+        <nav class="container">
+            <div class="logo"><span class="gold-text">Axis</span> Core</div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="about.html">من نحن</a></li>
+                <li><a href="index.html#solutions">الحلول</a></li>
+                <li><a href="javascript:void(0)" onclick="showWorksPopup()">أعمالنا</a></li>
+                <li><a href="blog.html" class="active-page">مدونة</a></li>
+                <li><a href="javascript:void(0)" onclick="showAcademyPopup()">Academy</a></li>
+            </ul>
+            <button id="langToggle" class="lang-toggle" onclick="showLangPopup()">AR / EN</button>
+            <button id="themeToggleIcon" class="theme-toggle-icon" onclick="showThemePopup()">
+                <i class="fas fa-moon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <section class="blog-hero">
+        <div class="container">
+            <h1 class="blog-title">المدونة التقنية</h1>
+            <p class="blog-subtitle">نشاركك خبراتنا في عالم البرمجيات، الهندسة، وأفضل الممارسات.</p>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-card-image"><i class="fas fa-code"></i></div>
+                    <div class="blog-card-content">
+                        <h3 class="blog-card-title">كيف تختار لغة البرمجة المناسبة لمشروعك؟</h3>
+                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 25 مارس 2026</span>
+                        <p class="blog-card-excerpt">اختيار لغة البرمجة هو قرار مصيري لأي مشروع. نناقش في هذا المقال العوامل المؤثرة وأفضل اللغات حسب نوع المشروع...</p>
+                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-card-image"><i class="fas fa-shield-alt"></i></div>
+                    <div class="blog-card-content">
+                        <h3 class="blog-card-title">أساسيات الأمن السيبراني في تطبيقات الويب</h3>
+                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 20 مارس 2026</span>
+                        <p class="blog-card-excerpt">الأمن ليس إضافة، بل جزء من التصميم. تعرف على أهم الثغرات الشائعة وكيفية حماية تطبيقاتك من الاختراقات...</p>
+                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-card-image"><i class="fas fa-cloud"></i></div>
+                    <div class="blog-card-content">
+                        <h3 class="blog-card-title">مقدمة إلى الحوسبة السحابية للشركات الناشئة</h3>
+                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 15 مارس 2026</span>
+                        <p class="blog-card-excerpt">كيف تستفيد الشركات الناشئة من الخدمات السحابية؟ دليل مبسط لاختيار البنية التحتية المناسبة وتوفير التكاليف...</p>
+                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer><div class="container"><p>&copy; 2026 جميع الحقوق محفوظة لشركة Axis Core</p></div></footer>
+</div>
+
+<!-- نافذة المقالات -->
+<div id="popupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-tools"></i>
+        <h3>جاري التجهيز</h3>
+        <p>المقال قيد الإعداد. سيتم نشره قريبًا. تابعونا!</p>
+        <button class="popup-close" onclick="closePopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة أعمالنا -->
+<div id="worksPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-briefcase"></i>
+        <h3>أعمالنا قريبًا</h3>
+        <p>نستعد لعرض مشاريعنا المميزة. قريبًا جدًا ستجدون أعمالنا هنا. تابعونا!</p>
+        <button class="popup-close" onclick="closeWorksPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة اللغة -->
+<div id="langPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-language"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>سيتم إضافة الترجمة إلى الإنجليزية قريبًا. شكرًا لصبرك!</p>
+        <button class="popup-close" onclick="closeLangPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الأكاديمية -->
+<div id="academyPopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>Axis Core Academy</h3>
+        <p>🚧 قيد التجهيز – سننطلق قريبًا.</p>
+        <p>تابعنا لمعرفة موعد الإطلاق!</p>
+        <button class="popup-close" onclick="closeAcademyPopup()">حسنًا</button>
+    </div>
+</div>
+
+<!-- نافذة الوضع الليلي/النهاري -->
+<div id="themePopupOverlay" class="popup-overlay">
+    <div class="popup-content">
+        <i class="fas fa-adjust"></i>
+        <h3>🚧 قيد التطوير</h3>
+        <p>هذه الميزة قيد التطوير، سيتم إتاحتها في الإصدارات القادمة.</p>
+        <button class="popup-close" onclick="closeThemePopup()">حسنًا</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="script.js"></script>
+<script>
+    function showPopup() { document.getElementById('popupOverlay').style.display = 'flex'; }
+    function closePopup() { document.getElementById('popupOverlay').style.display = 'none'; }
+    function showWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'flex'; }
+    function closeWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'none'; }
+    function showLangPopup() { document.getElementById('langPopupOverlay').style.display = 'flex'; }
+    function closeLangPopup() { document.getElementById('langPopupOverlay').style.display = 'none'; }
+    function showAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'flex'; }
+    function closeAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'none'; }
+    function showThemePopup() { document.getElementById('themePopupOverlay').style.display = 'flex'; }
+    function closeThemePopup() { document.getElementById('themePopupOverlay').style.display = 'none'; }
+    document.getElementById('popupOverlay').addEventListener('click', function(e) { if(e.target === this) closePopup(); });
+    document.getElementById('worksPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeWorksPopup(); });
+    document.getElementById('langPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeLangPopup(); });
+    document.getElementById('academyPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeAcademyPopup(); });
+    document.getElementById('themePopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeThemePopup(); });
+</script>
+</body>
+</html>
