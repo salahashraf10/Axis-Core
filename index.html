@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axis Core </title>
+    <title>Axis Core | شركة هندسة برمجية في مصر</title>
     <meta name="description" content="Axis Core – شركة هندسة برمجية في مصر، نقدم أنظمة سحابية، واجهات مستخدم، وأمن سيبراني. تأسست على يد المهندس صلاح أشرف.">
     <meta name="keywords" content="هندسة برمجية, تطوير مواقع, أنظمة سحابية, أمن سيبراني, Axis Core, شركة برمجيات مصر, صلاح أشرف">
     <meta name="author" content="صلاح أشرف">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://axis-core-official.netlify.app/">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -205,6 +207,82 @@
             position: relative;
             z-index: 1;
         }
+
+        /* زر الذهاب للأعلى */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            background-color: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 999;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+        }
+        .scroll-to-top:hover {
+            transform: scale(1.1);
+            background-color: #ffd966;
+        }
+
+        /* المساحة الإعلانية المربعة */
+        .ads-square {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .ads-card {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 25px 20px;
+            width: 280px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            transition: 0.3s;
+        }
+        .ads-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212,175,55,0.2);
+        }
+        .ads-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+        .ads-title {
+            color: var(--gold);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .ads-text {
+            color: var(--text-silver);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .ads-whatsapp {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .ads-whatsapp:hover {
+            background: #ffd966;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -304,6 +382,21 @@
     <section class="section-padding code-viewer-section">
         <div class="container"><div class="code-viewer"><pre class="code-content" id="dynamic-code"><code id="code-text"></code></pre></div></div>
     </section>
+
+    <!-- ========== المساحة الإعلانية المربعة (قبل حلول الشركات) ========== -->
+    <div class="ads-square">
+        <div class="ads-card">
+            <div class="ads-icon">
+                <i class="fas fa-ad"></i>
+            </div>
+            <div class="ads-title">مساحة مخصصة للإعلانات</div>
+            <div class="ads-text">للتواصل لحجز مساحتك الإعلانية</div>
+            <a href="https://wa.me/201554561706" target="_blank" class="ads-whatsapp">
+                <i class="fab fa-whatsapp"></i> wa.me/201554561706
+            </a>
+        </div>
+    </div>
+
     <section id="solutions" class="section-padding dark-bg">
         <div class="container">
             <h2 class="section-title">حلول الشركات</h2>
@@ -338,6 +431,7 @@
             </div>
         </div>
     </section>
+
     <section id="team-soon" class="section-padding dark-bg">
         <div class="container">
             <h2 class="section-title">فريق النخبة <span class="gold-text">Axis Core</span></h2>
@@ -350,8 +444,8 @@
                     <h3 class="employee-name">بهاء الدين</h3>
                     <div class="employee-name-en">Bahaa El-Din</div>
                     <div class="employee-title">Programmer</div>
-                    <div class="employee-role">Frontend</div>
-                    <div class="employee-nationality">🇵🇸 فلسطيني</div>
+                    <div class="employee-role">Front-end</div>
+                    <div class="employee-nationality">🇵🇸 فلسطيني - Palestinian</div>
                 </div>
                 <div class="employee-card">
                     <div class="employee-avatar">
@@ -360,12 +454,33 @@
                     <h3 class="employee-name">عبد الله حطب</h3>
                     <div class="employee-name-en">Abdullah Hatab</div>
                     <div class="employee-title">Programmer</div>
-                    <div class="employee-role">Frontend</div>
-                    <div class="employee-nationality">🇸🇾 سوري</div>
+                    <div class="employee-role">Front-end</div>
+                    <div class="employee-nationality">🇸🇾 سوري - Syrian</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3 class="employee-name">أميرة علي</h3>
+                    <div class="employee-name-en">Amira Ali</div>
+                    <div class="employee-title">Programmer</div>
+                    <div class="employee-role">Back-end</div>
+                    <div class="employee-nationality">🇪🇬 مصرية - Egyptian</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-avatar">
+                        <img src="ziad.png" alt="زياد رضا">
+                    </div>
+                    <h3 class="employee-name">زياد رضا</h3>
+                    <div class="employee-name-en">Ziad Rida</div>
+                    <div class="employee-title">Programmer</div>
+                    <div class="employee-role">Back-end</div>
+                    <div class="employee-nationality">🇪🇬 مصري - Egyptian</div>
                 </div>
             </div>
         </div>
     </section>
+
     <section id="faq" class="section-padding">
         <div class="container">
             <div class="faq-header"><h2 class="section-title">الأسئلة الشائعة</h2><p class="section-subtitle">إجابات تقنية حول معايير إنشاء وتطوير منصاتكم الرقمية</p></div>
@@ -437,6 +552,11 @@
     </div>
 </div>
 
+<!-- زر الذهاب للأعلى -->
+<button id="scrollToTopBtn" class="scroll-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="script.js"></script>
 <script>
@@ -478,6 +598,19 @@
     // استدعاء النافذة بعد ما الصفحة تتحمل
     window.addEventListener('DOMContentLoaded', function() {
         showBetaNotice();
+    });
+
+    // ========== زر الذهاب للأعلى ==========
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            scrollBtn.style.display = 'block';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    });
+    scrollBtn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 </script>
 </body>
