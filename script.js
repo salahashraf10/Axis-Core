@@ -1,4 +1,4 @@
-// Axis Core - Official Logic
+// Axis Core - Official Logic (Optimized for Smooth Performance)
 // Designed by: Salah Ashraf
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,10 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const diff = launchDate - now;
         const timerElement = document.getElementById("countdown");
 
-        if (!timerElement) {
-            console.log("عنصر countdown غير موجود في الصفحة");
-            return;
-        }
+        if (!timerElement) return;
 
         if (diff <= 0) {
             timerElement.innerHTML = "🚀 تم الإطلاق التجريبي بنجاح! مرحباً بكم في المستقبل.";
@@ -31,38 +28,62 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTimer();
     setInterval(updateTimer, 1000);
 
-    // 2. كود الأسئلة الشائعة (FAQ)
-    const questions = document.querySelectorAll('.faq-question');
-    questions.forEach(question => {
-        question.addEventListener('click', () => {
-            const item = question.parentElement;
-            document.querySelectorAll('.faq-item').forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
+    // 2. كود الأسئلة الشائعة (FAQ) - سلس وسريع
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isActive = item.classList.contains('active');
+                
+                // قفل الباقي
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // تبديل الحالة
+                if (!isActive) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
                 }
             });
-            item.classList.toggle('active');
-        });
+        }
     });
 
-    // 3. تأثيرات الظهور عند التمرير (Scroll Animations)
-    const fadeElements = document.querySelectorAll('.standard-card, .partner-item, .soon-card, .faq-item, .section-title, .architect-wrapper, .hero-title');
+    // 3. تأثيرات الظهور عند التمرير (Scroll Animations) - محسنة للأداء
+    const fadeElements = document.querySelectorAll('.standard-card, .partner-card, .faq-item, .section-title, .hero-title, .employee-card');
     
     function checkVisibility() {
         fadeElements.forEach(el => {
             const rect = el.getBoundingClientRect();
             const windowHeight = window.innerHeight;
-            if (rect.top < windowHeight - 100 && rect.bottom > 100) {
+            if (rect.top < windowHeight - 80) {
                 el.classList.add('visible');
             }
         });
     }
     
+    // استخدام requestAnimationFrame للأداء الأفضل
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                checkVisibility();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+    
     window.addEventListener('load', checkVisibility);
-    window.addEventListener('scroll', checkVisibility);
     window.addEventListener('resize', checkVisibility);
+    checkVisibility();
 
-    // 4. عارض النصوص التقنية
+    // 4. عارض النصوص التقنية (متغيرات - أخف)
     const textElement = document.getElementById('code-text');
     if (textElement) {
         const techMessages = [
@@ -77,11 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
         textElement.textContent = techMessages[0];
         setInterval(() => {
             currentIndex = (currentIndex + 1) % techMessages.length;
-            textElement.textContent = techMessages[currentIndex];
-        }, 4000);
+            // تأثير fade سلس
+            textElement.style.opacity = '0';
+            setTimeout(() => {
+                textElement.textContent = techMessages[currentIndex];
+                textElement.style.opacity = '1';
+            }, 200);
+        }, 5000);
     }
 
-    // 5. صفحة التحميل (Pre-loader)
+    // 5. صفحة التحميل (Pre-loader) - يظهر مرة واحدة لكل جلسة تصفح
     const preloader = document.getElementById('preloader');
     const siteContent = document.querySelector('.site-content');
     const hasSeenPreloader = sessionStorage.getItem('preloaderShown');
@@ -95,8 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     preloader.style.display = 'none';
                     siteContent.style.display = 'block';
                     checkVisibility();
-                }, 500);
-            }, 1500);
+                }, 400);
+            }, 1200);
         } else {
             preloader.style.display = 'none';
             siteContent.style.display = 'block';
@@ -106,129 +132,72 @@ document.addEventListener('DOMContentLoaded', () => {
         if (siteContent) siteContent.style.display = 'block';
     }
 
-    // 6. قائمة الهامبرغر للموبايل
-    const navLinks = document.querySelector('.nav-links');
-    const menuToggle = document.createElement('button');
-    menuToggle.className = 'menu-toggle';
-    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-    menuToggle.setAttribute('aria-label', 'القائمة');
+    // 6. قائمة الهامبرغر للموبايل (محسنة)
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
     
-    const nav = document.querySelector('nav');
-    if (nav && !document.querySelector('.menu-toggle')) {
-        nav.appendChild(menuToggle);
-    }
-    
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            if (navLinks) {
-                navLinks.classList.toggle('active');
-            }
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.toggle('show');
         });
-    }
-    
-    if (navLinks) {
+        
+        // قفل القائمة لما يضغط على أي رابط
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
+                navLinks.classList.remove('show');
             });
         });
     }
 
-    // 7. شريط التقدم (Progress Bar)
+    // 7. شريط التقدم (Progress Bar) - خفيف
     const progressBar = document.getElementById('progressBar');
     if (progressBar) {
+        let progressTicking = false;
         window.addEventListener('scroll', () => {
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            const scrollTop = window.scrollY;
-            const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
-            progressBar.style.width = scrollPercent + '%';
+            if (!progressTicking) {
+                requestAnimationFrame(() => {
+                    const windowHeight = window.innerHeight;
+                    const documentHeight = document.documentElement.scrollHeight;
+                    const scrollTop = window.scrollY;
+                    const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+                    progressBar.style.width = scrollPercent + '%';
+                    progressTicking = false;
+                });
+                progressTicking = true;
+            }
         });
     }
     
     // 8. شفافية الهيدر عند التمرير
     const header = document.getElementById('mainHeader');
     if (header) {
+        let headerTicking = false;
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            if (!headerTicking) {
+                requestAnimationFrame(() => {
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                    headerTicking = false;
+                });
+                headerTicking = true;
             }
         });
     }
     
-    // 9. تفعيل خلفية الجزيئات (Particles)
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-bg', {
-            particles: {
-                number: { value: 60, density: { enable: true, value_area: 800 } },
-                color: { value: '#d4af37' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.3, random: true },
-                size: { value: 3, random: true },
-                line_linked: { enable: false },
-                move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out' }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: { onhover: { enable: false }, onclick: { enable: false }, resize: true }
-            },
-            retina_detect: true
-        });
-    } else {
-        console.log("Particles.js library not loaded");
-    }
-
-    // 10. تحديث Uptime بشكل عشوائي
-    const uptimeElement = document.querySelector('.uptime span');
+    // 9. تحديث Uptime بشكل عشوائي (أخف)
+    const uptimeElement = document.getElementById('uptimeValue');
     if (uptimeElement) {
         setInterval(() => {
             const newUptime = (85.2 + Math.random() * 15.6).toFixed(1);
-            uptimeElement.textContent = `Uptime: ${newUptime}%`;
-        }, 8000);
+            uptimeElement.textContent = newUptime;
+        }, 10000);
     }
 
-    // 11. أهداف طموحة - عداد متحرك (يتفعل عند ظهور القسم)
-    const impactSection = document.querySelector('.impact-section');
-    if (impactSection) {
-        const counters = [
-            { id: 'codeTarget', target: 50000, suffix: '+' },
-            { id: 'projectsTarget', target: 25, suffix: '+' },
-            { id: 'clientsTarget', target: 20, suffix: '+' }
-        ];
-        let started = false;
-
-        function updateCounter(counter) {
-            const element = document.getElementById(counter.id);
-            if (!element) return;
-            let current = 0;
-            const increment = Math.ceil(counter.target / 60);
-            const interval = setInterval(() => {
-                current += increment;
-                if (current >= counter.target) {
-                    current = counter.target;
-                    clearInterval(interval);
-                }
-                element.textContent = current + counter.suffix;
-            }, 20);
-        }
-
-        function checkImpactVisibility() {
-            if (started) return;
-            const rect = impactSection.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 100) {
-                started = true;
-                counters.forEach(counter => updateCounter(counter));
-            }
-        }
-
-        window.addEventListener('scroll', checkImpactVisibility);
-        window.addEventListener('load', checkImpactVisibility);
-        checkImpactVisibility();
-    }
-
-    // 12. نافذة أعمالنا
+    // 10. النوافذ المنبثقة
     window.showWorksPopup = function() {
         const popup = document.getElementById('worksPopupOverlay');
         if (popup) popup.style.display = 'flex';
@@ -239,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (popup) popup.style.display = 'none';
     };
     
-    // 13. نافذة اللغة
     window.showLangPopup = function() {
         const popup = document.getElementById('langPopupOverlay');
         if (popup) popup.style.display = 'flex';
@@ -250,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (popup) popup.style.display = 'none';
     };
     
-    // 14. نافذة الأكاديمية
     window.showAcademyPopup = function() {
         const popup = document.getElementById('academyPopupOverlay');
         if (popup) popup.style.display = 'flex';
@@ -261,44 +228,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (popup) popup.style.display = 'none';
     };
     
+    window.showThemePopup = function() {
+        const popup = document.getElementById('themePopupOverlay');
+        if (popup) popup.style.display = 'flex';
+    };
+    
+    window.closeThemePopup = function() {
+        const popup = document.getElementById('themePopupOverlay');
+        if (popup) popup.style.display = 'none';
+    };
+    
     // إغلاق النوافذ عند الضغط خارجها
-    const worksPopup = document.getElementById('worksPopupOverlay');
-    if (worksPopup) {
-        worksPopup.addEventListener('click', function(e) {
-            if (e.target === this) window.closeWorksPopup();
+    const popups = ['worksPopupOverlay', 'langPopupOverlay', 'academyPopupOverlay', 'themePopupOverlay'];
+    popups.forEach(popupId => {
+        const popup = document.getElementById(popupId);
+        if (popup) {
+            popup.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // 11. زر العودة للأعلى
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    if (scrollBtn) {
+        let btnTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!btnTicking) {
+                requestAnimationFrame(() => {
+                    scrollBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+                    btnTicking = false;
+                });
+                btnTicking = true;
+            }
         });
-    }
-    
-    const langPopup = document.getElementById('langPopupOverlay');
-    if (langPopup) {
-        langPopup.addEventListener('click', function(e) {
-            if (e.target === this) window.closeLangPopup();
-        });
-    }
-    
-    const academyPopup = document.getElementById('academyPopupOverlay');
-    if (academyPopup) {
-        academyPopup.addEventListener('click', function(e) {
-            if (e.target === this) window.closeAcademyPopup();
+        
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

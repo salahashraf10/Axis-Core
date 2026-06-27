@@ -726,3 +726,131 @@ footer {
 .faq-item:nth-child(3) { transition-delay: 0.3s; }
 .faq-item:nth-child(4) { transition-delay: 0.4s; }
 
+/* ========== إعلان BVB NILE EGYPT ========== */
+.bvb-ad-link {
+    text-decoration: none;
+    display: block;
+}
+.bvb-ad-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    padding: 15px;
+    transition: 0.3s;
+}
+.bvb-ad-content:hover {
+    background: rgba(0,0,0,0.6);
+    transform: scale(1.02);
+}
+.bvb-ad-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 12px;
+}
+.bvb-ad-text {
+    text-align: center;
+}
+.bvb-ad-title {
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.bvb-ad-sub {
+    color: var(--text-silver);
+    font-size: 0.85rem;
+}
+
+/* ========== شريط الأخبار البطيء جداً (النسخة النهائية) ========== */
+.news-ticker {
+    background: #050505;
+    border-bottom: 2px solid var(--gold);
+    padding: 15px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    animation: scroll-slow 300s linear infinite;
+}
+
+.ticker-track span {
+    display: inline-block;
+    padding: 0 150px;
+    color: var(--text-silver);
+    font-size: 1rem;
+    direction: rtl;
+    font-weight: 500;
+}
+
+.ticker-track b { 
+    color: var(--gold); 
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes scroll-slow {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+@media (max-width: 768px) {
+    .ticker-track { 
+        animation-duration: 400s; 
+    }
+    .ticker-track span { 
+        font-size: 0.9rem; 
+        padding: 0 100px; 
+    }
+}
+
+/* ========== الأسئلة الشائعة Accordion (نسخة آمنة) ========== */
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: var(--bg-card);
+    margin-bottom: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+.faq-question {
+    padding: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    background: rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+.faq-question:hover {
+    background: rgba(212, 175, 55, 0.1);
+}
+.faq-question i {
+    transition: 0.3s;
+}
+.faq-answer {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    color: var(--text-silver);
+    line-height: 1.6;
+}
+.faq-item.active .faq-answer {
+    padding: 18px;
+    max-height: 300px;
+}
+.faq-item.active .faq-question i {
+    transform: rotate(45deg);
+}

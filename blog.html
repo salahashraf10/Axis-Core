@@ -7,250 +7,656 @@
     <meta name="description" content="مدونة Axis Core التقنية – مقالات حول هندسة البرمجيات، تطوير الويب، الأمن السيبراني، وأفضل الممارسات البرمجية.">
     <meta name="keywords" content="مدونة تقنية, هندسة برمجية, تطوير ويب, أمن سيبراني, Axis Core">
     <meta name="author" content="صلاح أشرف">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
-            z-index: 10000;
+        :root{--gold:#e6b800;--gold-glow:#ffd966;--bg-body:#0a0a0a;--bg-card:#111;--text-silver:#e0e0e0;--border-glow:rgba(230,184,0,0.3);--header-bg:rgba(5,5,5,0.95);--footer-bg:#050505;--card-bg:linear-gradient(145deg,#0f0f0f,#080808);--text-white:#fff;--bg-overlay:rgba(0,0,0,0.4);--shadow-color:rgba(0,0,0,0.3);}
+        *{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+        body{font-family:'Cairo',sans-serif;background:var(--bg-body);color:var(--text-white);}
+        .container{max-width:1200px;margin:0 auto;padding:0 20px;}
+        .gold-text{color:var(--gold);}
+        header{background:var(--header-bg);backdrop-filter:blur(10px);padding:15px 0;position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border-glow);}
+        nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+        .logo{display:flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:900;color:var(--text-white);}
+        .logo-img{height:40px;}
+        .nav-links{display:flex;gap:25px;list-style:none;}
+        .nav-links a{color:var(--text-white);text-decoration:none;transition:.3s;font-weight:500;}
+        .nav-links a:hover,.nav-links a.active-page{color:var(--gold);}
+        .nav-buttons{display:flex;gap:10px;align-items:center;}
+        .lang-toggle{background:transparent;border:1px solid var(--gold);border-radius:30px;padding:6px 15px;cursor:pointer;color:var(--gold);font-weight:bold;transition:.3s;}
+        .lang-toggle:hover{background:var(--gold);color:#000;}
+        .hamburger{display:none;font-size:1.5rem;cursor:pointer;color:var(--gold);background:none;border:none;}
+        @media (max-width:768px){
+            .hamburger{display:block;}
+            .nav-links{display:none;flex-direction:column;width:100%;background:var(--bg-card);padding:20px;margin-top:15px;border-radius:12px;border:1px solid var(--border-glow);}
+            .nav-links.show{display:flex;}
+            .nav-buttons{margin-right:auto;}
+        }
+        .blog-hero{text-align:center;padding:80px 0 40px;}
+        .blog-title{font-size:3rem;color:var(--gold);margin-bottom:20px;}
+        .blog-subtitle{font-size:1.2rem;color:var(--text-silver);max-width:700px;margin:0 auto;}
+        .section-padding{padding:60px 0;}
+        .blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;margin-top:40px;}
+        .blog-card{background:var(--card-bg);border-radius:20px;overflow:hidden;border:1px solid var(--border-glow);transition:.3s;position:relative;}
+        .blog-card:hover{transform:translateY(-8px);border-color:var(--gold);}
+        
+        /* علامة الحالة على الكارت */
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .badge-complete {
+            background: #22c55e;
+            color: white;
+        }
+        .badge-pending {
+            background: #e6b800;
+            color: #1a1a1a;
+        }
+        
+        .blog-card-image{height:200px;background:linear-gradient(135deg,#1a2a3a,#0f1a24);display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--gold);}
+        .blog-card-content{padding:25px;}
+        .blog-card-title{font-size:1.3rem;margin-bottom:10px;color:var(--gold);}
+        .blog-card-meta{font-size:.8rem;color:var(--text-silver);margin-bottom:15px;display:block;}
+        .blog-card-excerpt{color:var(--text-silver);line-height:1.7;margin-bottom:20px;}
+        .blog-read-more{color:var(--gold);text-decoration:none;font-weight:bold;display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
+        .blog-read-more:hover{gap:12px;}
+        
+        /* تنسيق المقال الكامل */
+        .full-article {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-glow);
+            overflow: hidden;
+            padding: 40px;
             display: none;
-            justify-content: center;
-            align-items: center;
         }
-        .popup-content {
-            background: var(--card-bg);
-            border: 1px solid var(--gold);
-            border-radius: 16px;
-            padding: 35px 40px;
+        .full-article.active {
+            display: block;
+        }
+        .article-header {
             text-align: center;
-            max-width: 400px;
-            width: 90%;
-            animation: fadeInUp 0.3s ease;
+            margin-bottom: 30px;
         }
-        .popup-content i {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 20px;
-        }
-        .popup-content h3 {
+        .article-title {
+            font-size: 2.2rem;
             color: var(--gold);
             margin-bottom: 15px;
-            font-size: 1.5rem;
+            line-height: 1.4;
         }
-        .popup-content p {
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
             color: var(--text-silver);
-            margin-bottom: 25px;
+            font-size: 0.85rem;
         }
-        .popup-close {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+        .article-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .popup-close:hover {
-            transform: scale(1.05);
-            background: #ffd966;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .lang-toggle {
-            background: transparent;
-            border: 1px solid var(--gold);
-            border-radius: 30px;
-            padding: 6px 15px;
-            cursor: pointer;
-            color: var(--gold);
-            font-weight: bold;
-            transition: 0.3s;
-            margin-right: 15px;
-        }
-        .lang-toggle:hover {
-            background: var(--gold);
-            color: #000;
-        }
-        /* أيقونة الوضع الليلي/النهاري */
-        .theme-toggle-icon {
-            background: transparent;
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            color: var(--gold);
-            font-size: 1.2rem;
-            transition: 0.3s;
+        .article-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
+            font-size: 5rem;
+            color: var(--gold);
+            border-radius: 16px;
+            margin-bottom: 30px;
         }
-        .theme-toggle-icon:hover {
+        .article-content {
+            line-height: 1.9;
+            color: var(--text-silver);
+        }
+        .article-content h2 {
+            color: var(--gold);
+            font-size: 1.6rem;
+            margin: 30px 0 15px;
+        }
+        .article-content h3 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin: 25px 0 10px;
+        }
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        .article-content ul, .article-content ol {
+            margin: 15px 0 20px 30px;
+        }
+        .article-content li {
+            margin-bottom: 8px;
+        }
+        .whatsapp-contact {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 20px;
+            border: 1px solid #25d366;
+        }
+        .whatsapp-contact p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--text-silver);
+        }
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #25d366;
+            color: white;
+            padding: 14px 35px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(37,211,102,0.3);
+        }
+        .whatsapp-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+        }
+        .whatsapp-btn i {
+            font-size: 1.5rem;
+        }
+        .back-to-blog {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 25px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .back-to-blog:hover {
             background: var(--gold);
             color: #000;
-            transform: rotate(15deg);
         }
+        .blog-section {
+            display: block;
+        }
+        .blog-section.hide {
+            display: none;
+        }
+        
+        footer{background:var(--footer-bg);padding:30px;text-align:center;border-top:1px solid var(--border-glow);margin-top:60px;}
+        footer p{color:var(--text-silver);}
+        .floating-btn{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;padding:12px 20px;border-radius:50px;text-decoration:none;display:flex;align-items:center;gap:10px;z-index:999;font-weight:bold;}
+        #preloader{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-body);z-index:9999;display:flex;justify-content:center;align-items:center;}
+        .loader-logo svg{width:80px;height:80px;}
+        .loader-text{margin-top:15px;color:var(--gold);font-size:1.2rem;}
+        .popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);z-index:10000;display:none;justify-content:center;align-items:center;}
+        .popup-content{background:var(--bg-card);border:1px solid var(--gold);border-radius:16px;padding:35px 40px;text-align:center;max-width:400px;width:90%;}
+        .popup-content i{font-size:3rem;color:var(--gold);margin-bottom:20px;}
+        .popup-content h3{color:var(--gold);margin-bottom:15px;font-size:1.5rem;}
+        .popup-content p{color:var(--text-silver);margin-bottom:25px;}
+        .popup-close{background:var(--gold);color:#000;border:none;padding:10px 25px;border-radius:30px;font-weight:bold;cursor:pointer;}
+        .scroll-to-top{position:fixed;bottom:80px;left:20px;background-color:var(--gold);color:#000;border:none;border-radius:50%;width:45px;height:45px;cursor:pointer;z-index:999;display:none;}
     </style>
 </head>
 <body>
 
-<div id="preloader">
-    <div class="loader-logo">
-        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path class="letter-path" d="M30 70 L50 20 L70 70 L60 70 L50 40 L40 70 L30 70Z" stroke="#d4af37" stroke-width="3" fill="none"/>
-            <path class="letter-path" d="M45 55 L55 55" stroke="#d4af37" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-        <p class="loader-text">Axis Core</p>
+<div id="preloader"><div class="loader-logo"><svg viewBox="0 0 100 100" fill="none"><path d="M30 70 L50 20 L70 70 L60 70 L50 40 L40 70 L30 70Z" stroke="#d4af37" stroke-width="3" fill="none"/><path d="M45 55 L55 55" stroke="#d4af37" stroke-width="3" stroke-linecap="round"/></svg><p class="loader-text gold-text">Axis Core</p></div></div>
+
+<div class="site-content" style="display:none;">
+    <header><nav class="container"><div class="logo"><img src="logo.png" alt="Axis Core Logo" class="logo-img"><span class="gold-text">Axis</span> Core</div><div class="nav-buttons"><button class="lang-toggle" onclick="showLangPopup()">AR/EN</button><button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button></div><ul class="nav-links" id="navLinks"><li><a href="index.html">الرئيسية</a></li><li><a href="about.html">من نحن</a></li><li><a href="index.html#solutions">الحلول</a></li><li><a href="#" onclick="showWorksPopup()">أعمالنا</a></li><li><a href="blog.html" class="active-page">مدونة</a></li><li><a href="academy.html">Academy</a></li></ul></nav></header>
+
+    <section class="blog-hero"><div class="container"><h1 class="blog-title">المدونة التقنية</h1><p class="blog-subtitle">نشاركك خبراتنا في عالم البرمجيات، الهندسة، وأفضل الممارسات.</p></div></section>
+
+    <!-- قسم معاينة المقالات -->
+    <div id="blogSection" class="blog-section">
+        <div class="container"><div class="blog-grid">
+            <!-- المقال الأول: كامل -->
+            <article class="blog-card" data-article="article1">
+                <div class="card-badge badge-complete">📖 شرح كامل</div>
+                <div class="blog-card-image"><i class="fas fa-code"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">كيف تختار لغة البرمجة المناسبة لمشروعك؟</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 25 مارس 2026</span>
+                    <p class="blog-card-excerpt">اختيار لغة البرمجة هو قرار مصيري لأي مشروع. نناقش في هذا المقال العوامل المؤثرة وأفضل اللغات حسب نوع المشروع...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showArticle('article1')">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال الثاني: أمن سيبراني - كامل -->
+            <article class="blog-card" data-article="article2">
+                <div class="card-badge badge-complete">📖 شرح كامل</div>
+                <div class="blog-card-image"><i class="fas fa-shield-alt"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">أساسيات الأمن السيبراني في تطبيقات الويب</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 20 مارس 2026</span>
+                    <p class="blog-card-excerpt">الأمن ليس إضافة، بل جزء من التصميم. تعرف على أهم الثغرات الشائعة وكيفية حماية تطبيقاتك من الاختراقات...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showArticle('article2')">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال الثالث: الحوسبة السحابية - كامل -->
+            <article class="blog-card" data-article="article3">
+                <div class="card-badge badge-complete">📖 شرح كامل</div>
+                <div class="blog-card-image"><i class="fas fa-cloud"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">مقدمة إلى الحوسبة السحابية للشركات الناشئة</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 15 مارس 2026</span>
+                    <p class="blog-card-excerpt">كيف تستفيد الشركات الناشئة من الخدمات السحابية؟ دليل مبسط لاختيار البنية التحتية المناسبة وتوفير التكاليف...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showArticle('article3')">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال الرابع: كود نظيف - أصبح كامل -->
+            <article class="blog-card" data-article="article4">
+                <div class="card-badge badge-complete">📖 شرح كامل</div>
+                <div class="blog-card-image"><i class="fas fa-code-branch"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">أفضل ممارسات كتابة الكود النظيف (Clean Code)</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 12 أبريل 2026</span>
+                    <p class="blog-card-excerpt">الكود النظيف هو أساس أي نظام متين. تعرف على أهم المبادئ والتقنيات لكتابة كود يسهل صيانته وتطويره...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showArticle('article4')">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال الخامس: قيد التجهيز -->
+            <article class="blog-card">
+                <div class="card-badge badge-pending">🚧 قيد التجهيز</div>
+                <div class="blog-card-image"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">مقدمة إلى DevOps وأهميته للشركات الناشئة</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 8 أبريل 2026</span>
+                    <p class="blog-card-excerpt">DevOps ليس مجرد أدوات، بل ثقافة عمل. كيف يمكن للشركات الناشئة الاستفادة من ممارسات DevOps لتسريع التطوير...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال السادس: قيد التجهيز -->
+            <article class="blog-card">
+                <div class="card-badge badge-pending">🚧 قيد التجهيز</div>
+                <div class="blog-card-image"><i class="fas fa-database"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">كيف تؤمن تطبيقك ضد هجمات الـ SQL Injection</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 3 أبريل 2026</span>
+                    <p class="blog-card-excerpt">SQL Injection من أخطر الثغرات الأمنية. تعرف على كيفية حماية تطبيقك منها باستخدام Prepared Statements والأدوات المناسبة...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال السابع: قيد التجهيز -->
+            <article class="blog-card">
+                <div class="card-badge badge-pending">🚧 قيد التجهيز</div>
+                <div class="blog-card-image"><i class="fab fa-python"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">دليل المبتدئين لتعلم لغة Python</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 18 أبريل 2026</span>
+                    <p class="blog-card-excerpt">Python من أسهل لغات البرمجة وأكثرها طلباً. تعرف على أساسيات اللغة وأهم المجالات التي يمكنك العمل فيها...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال الثامن: قيد التجهيز -->
+            <article class="blog-card">
+                <div class="card-badge badge-pending">🚧 قيد التجهيز</div>
+                <div class="blog-card-image"><i class="fab fa-git-alt"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">أساسيات Git و GitHub لكل مبرمج</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 22 أبريل 2026</span>
+                    <p class="blog-card-excerpt">Git هو نظام التحكم في الإصدارات الأكثر شهرة. تعلم الأساسيات التي يحتاجها كل مبرمج للعمل في فرق...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+            
+            <!-- المقال التاسع: قيد التجهيز -->
+            <article class="blog-card">
+                <div class="card-badge badge-pending">🚧 قيد التجهيز</div>
+                <div class="blog-card-image"><i class="fas fa-brain"></i></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">مقدمة إلى الذكاء الاصطناعي للمطورين</h3>
+                    <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 25 أبريل 2026</span>
+                    <p class="blog-card-excerpt">الذكاء الاصطناعي غير شكل الصناعة. تعرف على المفاهيم الأساسية وكيف يمكن للمطورين البدء في تعلم AI...</p>
+                    <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                </div>
+            </article>
+        </div></div>
     </div>
-</div>
 
-<div class="site-content" style="display: none;">
-    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
-
-    <header id="mainHeader">
-        <nav class="container">
-            <div class="logo"><span class="gold-text">Axis</span> Core</div>
-            <ul class="nav-links">
-                <li><a href="index.html">الرئيسية</a></li>
-                <li><a href="about.html">من نحن</a></li>
-                <li><a href="index.html#solutions">الحلول</a></li>
-                <li><a href="javascript:void(0)" onclick="showWorksPopup()">أعمالنا</a></li>
-                <li><a href="blog.html" class="active-page">مدونة</a></li>
-                <li><a href="javascript:void(0)" onclick="showAcademyPopup()">Academy</a></li>
-            </ul>
-            <button id="langToggle" class="lang-toggle" onclick="showLangPopup()">AR / EN</button>
-            <button id="themeToggleIcon" class="theme-toggle-icon" onclick="showThemePopup()">
-                <i class="fas fa-moon"></i>
-            </button>
-        </nav>
-    </header>
-
-    <section class="blog-hero">
-        <div class="container">
-            <h1 class="blog-title">المدونة التقنية</h1>
-            <p class="blog-subtitle">نشاركك خبراتنا في عالم البرمجيات، الهندسة، وأفضل الممارسات.</p>
-        </div>
-    </section>
-
-    <section class="section-padding">
-        <div class="container">
-            <div class="blog-grid">
-                <article class="blog-card">
-                    <div class="blog-card-image"><i class="fas fa-code"></i></div>
-                    <div class="blog-card-content">
-                        <h3 class="blog-card-title">كيف تختار لغة البرمجة المناسبة لمشروعك؟</h3>
-                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 25 مارس 2026</span>
-                        <p class="blog-card-excerpt">اختيار لغة البرمجة هو قرار مصيري لأي مشروع. نناقش في هذا المقال العوامل المؤثرة وأفضل اللغات حسب نوع المشروع...</p>
-                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
-                    </div>
-                </article>
-                <article class="blog-card">
-                    <div class="blog-card-image"><i class="fas fa-shield-alt"></i></div>
-                    <div class="blog-card-content">
-                        <h3 class="blog-card-title">أساسيات الأمن السيبراني في تطبيقات الويب</h3>
-                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 20 مارس 2026</span>
-                        <p class="blog-card-excerpt">الأمن ليس إضافة، بل جزء من التصميم. تعرف على أهم الثغرات الشائعة وكيفية حماية تطبيقاتك من الاختراقات...</p>
-                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
-                    </div>
-                </article>
-                <article class="blog-card">
-                    <div class="blog-card-image"><i class="fas fa-cloud"></i></div>
-                    <div class="blog-card-content">
-                        <h3 class="blog-card-title">مقدمة إلى الحوسبة السحابية للشركات الناشئة</h3>
-                        <span class="blog-card-meta"><i class="far fa-calendar-alt"></i> 15 مارس 2026</span>
-                        <p class="blog-card-excerpt">كيف تستفيد الشركات الناشئة من الخدمات السحابية؟ دليل مبسط لاختيار البنية التحتية المناسبة وتوفير التكاليف...</p>
-                        <a href="javascript:void(0)" class="blog-read-more" onclick="showPopup()">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
-                    </div>
-                </article>
+    <!-- المقال الأول كامل -->
+    <div id="article1" class="full-article">
+        <div class="article-header">
+            <h1 class="article-title">كيف تختار لغة البرمجة المناسبة لمشروعك؟</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 25 مارس 2026</span>
+                <span><i class="far fa-user"></i> كتب بواسطة: فريق Axis Core</span>
+                <span><i class="far fa-clock"></i> وقت القراءة: 7 دقائق</span>
             </div>
         </div>
-    </section>
-
-    <footer><div class="container"><p>&copy; 2026 جميع الحقوق محفوظة لشركة Axis Core</p></div></footer>
-</div>
-
-<!-- نافذة المقالات -->
-<div id="popupOverlay" class="popup-overlay">
-    <div class="popup-content">
-        <i class="fas fa-tools"></i>
-        <h3>جاري التجهيز</h3>
-        <p>المقال قيد الإعداد. سيتم نشره قريبًا. تابعونا!</p>
-        <button class="popup-close" onclick="closePopup()">حسنًا</button>
+        <div class="article-image">
+            <i class="fas fa-code"></i>
+        </div>
+        <div class="article-content">
+            <p>اختيار لغة البرمجة المناسبة هو أحد أهم القرارات التي ستتخذها عند بدء أي مشروع برمجي. القرار الخاطئ قد يكلفك الوقت والمال والجهد، بينما القرار الصحيح يمكن أن يسرع التطوير ويقلل المشاكل مستقبلاً.</p>
+            
+            <h2>العوامل المؤثرة في اختيار لغة البرمجة</h2>
+            <p>قبل أن تختار لغة البرمجة لمشروعك، يجب أن تأخذ في الاعتبار العوامل التالية:</p>
+            <ul>
+                <li><strong>نوع المشروع:</strong> هل هو تطبيق ويب؟ تطبيق موبايل؟ نظام ديسكتوب؟ ذكاء اصطناعي؟</li>
+                <li><strong>سرعة الأداء:</strong> هل المشروع يحتاج إلى سرعة عالية جداً؟</li>
+                <li><strong>حجم الفريق:</strong> هل فريقك متمرس في لغة معينة؟</li>
+                <li><strong>وقت التطوير:</strong> هل تحتاج إلى إطلاق سريع للمشروع؟</li>
+                <li><strong>قابلية التوسع:</strong> هل المشروع سيكبر في المستقبل؟</li>
+                <li><strong>الدعم والمكتبات:</strong> هل اللغة لديها مجتمع ومكتبات قوية؟</li>
+            </ul>
+            
+            <h2>أفضل لغات البرمجة حسب نوع المشروع</h2>
+            <ul>
+                <li><strong>تطبيقات الويب:</strong> JavaScript, Python, PHP, Ruby</li>
+                <li><strong>تطبيقات الموبايل:</strong> Kotlin, Swift, Flutter, React Native</li>
+                <li><strong>أنظمة الديسكتوب:</strong> C#, C++, Java, Python</li>
+                <li><strong>الذكاء الاصطناعي:</strong> Python, R, Julia</li>
+                <li><strong>أمن سيبراني:</strong> Python, C, C++, Bash</li>
+                <li><strong>ألعاب الفيديو:</strong> C++, C#, Lua</li>
+            </ul>
+            
+            <h2>نصيحة أخيرة</h2>
+            <p>لا تنخدع بـ "أفضل لغة برمجة" بشكل مطلق. أفضل لغة هي التي تناسب <strong>نوع مشروعك</strong>، <strong>خبرات فريقك</strong>، و<strong>أهدافك طويلة المدى</strong>.</p>
+            <p>في <strong class="gold-text">Axis Core</strong>، نساعدك في اختيار التقنيات المناسبة لمشروعك وبناء الحلول البرمجية المتكاملة التي تناسب احتياجاتك.</p>
+        </div>
+        
+        <div class="whatsapp-contact">
+            <p><i class="fas fa-comment-dots"></i> هل لديك استفسار عن مشروعك؟</p>
+            <p>فريق Axis Core جاهز للإجابة على أسئلتك وتقديم الاستشارة المجانية</p>
+            <a href="https://wa.me/201554561706" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> راسلنا
+            </a>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="javascript:void(0)" class="back-to-blog" onclick="hideArticle()">
+                <i class="fas fa-arrow-right"></i> العودة إلى المدونة
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- نافذة أعمالنا -->
-<div id="worksPopupOverlay" class="popup-overlay">
-    <div class="popup-content">
-        <i class="fas fa-briefcase"></i>
-        <h3>أعمالنا قريبًا</h3>
-        <p>نستعد لعرض مشاريعنا المميزة. قريبًا جدًا ستجدون أعمالنا هنا. تابعونا!</p>
-        <button class="popup-close" onclick="closeWorksPopup()">حسنًا</button>
+    <!-- المقال الثاني كامل (أساسيات الأمن السيبراني) -->
+    <div id="article2" class="full-article">
+        <div class="article-header">
+            <h1 class="article-title">أساسيات الأمن السيبراني في تطبيقات الويب</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 20 مارس 2026</span>
+                <span><i class="far fa-user"></i> كتب بواسطة: فريق Axis Core</span>
+                <span><i class="far fa-clock"></i> وقت القراءة: 8 دقائق</span>
+            </div>
+        </div>
+        <div class="article-image">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="article-content">
+            <p>الأمن السيبراني لم يعد رفاهية في عالم تطوير الويب، بل أصبح ضرورة ملحة. في هذا المقال، نستعرض أهم الثغرات الأمنية الشائعة في تطبيقات الويب وكيفية حماية تطبيقك منها.</p>
+            
+            <h2>أهم 5 ثغرات أمنية في تطبيقات الويب</h2>
+            
+            <h3>1. حقن SQL (SQL Injection)</h3>
+            <p>تحدث عندما يتم إدخال كود SQL ضار في استعلامات قاعدة البيانات. للوقاية منها، استخدم Prepared Statements أو Parameterized Queries.</p>
+            
+            <h3>2. البرمجة النصية عبر المواقع (XSS)</h3>
+            <p>تسمح للمهاجم بحقن سكربتات ضارة في صفحات الويب. الحل: تنقية المدخلات (Input Sanitization) وتشفير المخرجات (Output Encoding).</p>
+            
+            <h3>3. تزوير طلبات المواقع (CSRF)</h3>
+            <p>تخدع المستخدم لتنفيذ إجراءات غير مرغوب فيها. الوقاية: استخدام Tokens عشوائية في النماذج.</p>
+            
+            <h3>4. المصادقة المعطلة (Broken Authentication)</h3>
+            <p>تحدث بسبب ضعف آليات تسجيل الدخول. الحل: تفعيل المصادقة متعددة العوامل (MFA) واستخدام جلسات آمنة.</p>
+            
+            <h3>5. التعرض المفرط للبيانات (Sensitive Data Exposure)</h3>
+            <p>عدم تشفير البيانات الحساسة. الوقاية: استخدام HTTPS وتشفير البيانات في قاعدة البيانات.</p>
+            
+            <h2>أفضل ممارسات الأمن السيبراني</h2>
+            <ul>
+                <li><strong>استخدام HTTPS:</strong> تشفير جميع البيانات المرسلة بين المتصفح والخادم.</li>
+                <li><strong>تحديث المكتبات باستمرار:</strong> الثغرات الأمنية غالباً ما تُكتشف في المكتبات القديمة.</li>
+                <li><strong>تفعيل CSP (Content Security Policy):</strong> يمنع تنفيذ السكربتات غير المصرح بها.</li>
+                <li><strong>التحقق من صحة المدخلات:</strong> لا تثق أبداً في البيانات القادمة من المستخدم.</li>
+                <li><strong>تسجيل الأنشطة (Logging):</strong> لتتبع أي محاولات اختراق.</li>
+            </ul>
+            
+            <h2>أدوات لاختبار الاختراق</h2>
+            <ul>
+                <li><strong>OWASP ZAP:</strong> أداة مفتوحة المصدر لاختبار أمان تطبيقات الويب.</li>
+                <li><strong>Burp Suite:</strong> منصة متكاملة لاختبار الاختراق.</li>
+                <li><strong>Nmap:</strong> لفحص المنافذ والخدمات.</li>
+                <li><strong>SQLmap:</strong> لاكتشاف ثغرات SQL Injection تلقائياً.</li>
+            </ul>
+            
+            <h2>خلاصة</h2>
+            <p>الأمن السيبراني رحلة مستمرة، وليس وجهة نهائية. ابدأ بتطبيق الممارسات الأساسية، واستمر في تحسين أمان تطبيقك مع مرور الوقت. في <strong class="gold-text">Axis Core</strong>، نضع الأمن في صميم كل تطبيق نبنيه.</p>
+        </div>
+        
+        <div class="whatsapp-contact">
+            <p><i class="fas fa-comment-dots"></i> هل لديك استفسار عن أمان تطبيقك؟</p>
+            <p>فريق Axis Core جاهز لتقديم استشارة مجانية حول تأمين مشروعك</p>
+            <a href="https://wa.me/201554561706" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> راسلنا
+            </a>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="javascript:void(0)" class="back-to-blog" onclick="hideArticle()">
+                <i class="fas fa-arrow-right"></i> العودة إلى المدونة
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- نافذة اللغة -->
-<div id="langPopupOverlay" class="popup-overlay">
-    <div class="popup-content">
-        <i class="fas fa-language"></i>
-        <h3>🚧 قيد التطوير</h3>
-        <p>سيتم إضافة الترجمة إلى الإنجليزية قريبًا. شكرًا لصبرك!</p>
-        <button class="popup-close" onclick="closeLangPopup()">حسنًا</button>
+    <!-- المقال الثالث كامل (مقدمة إلى الحوسبة السحابية) -->
+    <div id="article3" class="full-article">
+        <div class="article-header">
+            <h1 class="article-title">مقدمة إلى الحوسبة السحابية للشركات الناشئة</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 15 مارس 2026</span>
+                <span><i class="far fa-user"></i> كتب بواسطة: فريق Axis Core</span>
+                <span><i class="far fa-clock"></i> وقت القراءة: 6 دقائق</span>
+            </div>
+        </div>
+        <div class="article-image">
+            <i class="fas fa-cloud"></i>
+        </div>
+        <div class="article-content">
+            <p>الحوسبة السحابية غيرت طريقة عمل الشركات الناشئة بشكل جذري. بدلاً من شراء خوادم باهظة الثمن، يمكنك الآن استئجار البنية التحتية التي تحتاجها بدقائق وبأسعار معقولة.</p>
+            
+            <h2>ما هي الحوسبة السحابية؟</h2>
+            <p>الحوسبة السحابية هي تقديم خدمات الحوسبة (الخوادم، التخزين، قواعد البيانات، الشبكات، البرمجيات) عبر الإنترنت ("السحابة")، مما يتيح ابتكاراً أسرع وموارد مرنة واقتصادات حجم.</p>
+            
+            <h2>فوائد الحوسبة السحابية للشركات الناشئة</h2>
+            <ul>
+                <li><strong>توفير التكاليف:</strong> تدفع فقط مقابل ما تستخدمه، لا حاجة لشراء أجهزة باهظة.</li>
+                <li><strong>المرونة والتوسع:</strong> يمكنك زيادة أو تقليل الموارد حسب احتياجك خلال دقائق.</li>
+                <li><strong>الأمان:</strong> مقدمي الخدمات السحابية يستثمرون بكثافة في الأمان والامتثال.</li>
+                <li><strong>الوصول العالمي:</strong> انشر تطبيقك في مراكز بيانات حول العالم لتقليل زمن الاستجابة.</li>
+                <li><strong>التركيز على المنتج:</strong> لا تشغل بالك بإدارة الخوادم، ركز على تطوير منتجك.</li>
+            </ul>
+            
+            <h2>أكبر مقدمي خدمات الحوسبة السحابية</h2>
+            <ul>
+                <li><strong>AWS (Amazon Web Services):</strong> الأكبر والأكثر انتشاراً، مع أكثر من 200 خدمة.</li>
+                <li><strong>Microsoft Azure:</strong> ممتاز للشركات التي تستخدم منتجات مايكروسوفت.</li>
+                <li><strong>Google Cloud Platform (GCP):</strong> قوي في تحليل البيانات والذكاء الاصطناعي.</li>
+                <li><strong>Heroku:</strong> خيار ممتاز للمبتدئين لنشر التطبيقات بسهولة.</li>
+                <li><strong>DigitalOcean:</strong> بسيط ومناسب للشركات الناشئة الصغيرة.</li>
+            </ul>
+            
+            <h2>أنواع الخدمات السحابية</h2>
+            <ul>
+                <li><strong>IaaS (Infrastructure as a Service):</strong> بنية تحتية كخدمة (خوادم افتراضية، تخزين).</li>
+                <li><strong>PaaS (Platform as a Service):</strong> منصة كخدمة (بيئة تطوير متكاملة).</li>
+                <li><strong>SaaS (Software as a Service):</strong> برمجيات كخدمة (تطبيقات جاهزة مثل Gmail).</li>
+                <li><strong>Serverless:</strong> تشغيل الكود دون إدارة الخوادم (AWS Lambda).</li>
+            </ul>
+            
+            <h2>نصائح للبدء مع الحوسبة السحابية</h2>
+            <ul>
+                <li>ابدأ بـ <strong>الفترة المجانية</strong> التي تقدمها معظم مقدمي الخدمات.</li>
+                <li>استخدم <strong>حاسبة التكاليف</strong> لتقدير نفقاتك الشهرية.</li>
+                <li>طبق مبدأ <strong>FinOps</strong> لمراقبة وتحسين تكاليف السحابة.</li>
+                <li>تعلم <strong>Infrastructure as Code (IaC)</strong> باستخدام Terraform أو CloudFormation.</li>
+            </ul>
+            
+            <h2>خلاصة</h2>
+            <p>الحوسبة السحابية هي المستقبل، والشركات الناشئة التي تتبناها مبكراً تكتسب ميزة تنافسية هائلة. في <strong class="gold-text">Axis Core</strong>، نساعدك في تصميم ونشر بنية تحتية سحابية تناسب احتياجاتك وميزانيتك.</p>
+        </div>
+        
+        <div class="whatsapp-contact">
+            <p><i class="fas fa-comment-dots"></i> هل تفكر في نقل مشروعك إلى السحابة؟</p>
+            <p>فريق Axis Core جاهز لمساعدتك في اختيار البنية التحتية المناسبة</p>
+            <a href="https://wa.me/201554561706" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> راسلنا
+            </a>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="javascript:void(0)" class="back-to-blog" onclick="hideArticle()">
+                <i class="fas fa-arrow-right"></i> العودة إلى المدونة
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- نافذة الأكاديمية -->
-<div id="academyPopupOverlay" class="popup-overlay">
-    <div class="popup-content">
-        <i class="fas fa-graduation-cap"></i>
-        <h3>Axis Core Academy</h3>
-        <p>🚧 قيد التجهيز – سننطلق قريبًا.</p>
-        <p>تابعنا لمعرفة موعد الإطلاق!</p>
-        <button class="popup-close" onclick="closeAcademyPopup()">حسنًا</button>
+    <!-- المقال الرابع كامل (أفضل ممارسات كتابة الكود النظيف) -->
+    <div id="article4" class="full-article">
+        <div class="article-header">
+            <h1 class="article-title">أفضل ممارسات كتابة الكود النظيف (Clean Code)</h1>
+            <div class="article-meta">
+                <span><i class="far fa-calendar-alt"></i> 12 أبريل 2026</span>
+                <span><i class="far fa-user"></i> كتب بواسطة: فريق Axis Core</span>
+                <span><i class="far fa-clock"></i> وقت القراءة: 7 دقائق</span>
+            </div>
+        </div>
+        <div class="article-image">
+            <i class="fas fa-code-branch"></i>
+        </div>
+        <div class="article-content">
+            <p>الكود النظيف ليس مجرد رفاهية، بل هو ضرورة لأي مشروع برمجي ناجح. الكود النظيف يسهل صيانته، تطويره، وفهمه من قبل أعضاء الفريق الآخرين. في هذا المقال، نستعرض أهم المبادئ والتقنيات لكتابة كود نظيف واحترافي.</p>
+            
+            <h2>ما هو الكود النظيف (Clean Code)؟</h2>
+            <p>الكود النظيف هو الكود الذي يسهل قراءته، فهمه، وتعديله. الكود الجيد يروي قصة للمطور الذي يقرأه. كما قال روبرت س. مارتن (Uncle Bob): "الوقت الوحيد الذي يُكتب فيه الكود بسرعة هو عندما يكون نظيفاً".</p>
+            
+            <h2>أهم مبادئ الكود النظيف</h2>
+            
+            <h3>1. أسماء ذات معنى (Meaningful Names)</h3>
+            <p>استخدم أسماء تعبر عن الغرض من المتغير، الدالة، أو الكلاس. تجنب الاختصارات غير الواضحة. مثلاً: بدلاً من `d` استخدم `daysSinceLastUpdate`.</p>
+            
+            <h3>2. دوال قصيرة ومركزة (Small Functions)</h3>
+            <p>يجب أن تكون الدالة قصيرة وتقوم بشيء واحد فقط. قاعدة جيدة: إذا احتاجت الدالة أكثر من 10-15 سطراً، قسّمها إلى دوال أصغر.</p>
+            
+            <h3>3. لا تكرر نفسك (DRY - Don't Repeat Yourself)</h3>
+            <p>كل جزء من المعرفة يجب أن يكون له تمثيل واحد فقط في النظام. تجنب نسخ ولصق الكود، واستخدم الدوال أو الكلاسات لإعادة الاستخدام.</p>
+            
+            <h3>4. التعليقات المفيدة (Comments)</h3>
+            <p>التعليقات الجيدة تشرح "لماذا" وليس "ماذا". الكود الجيد يشرح نفسه بنفسه. استخدم التعليقات فقط عندما لا تستطيع التعبير عن النية بالكود.</p>
+            
+            <h3>5. معالجة الأخطاء (Error Handling)</h3>
+            <p>تعامل مع الأخطاء بطريقة أنيقة. استخدم الاستثناءات بدلاً من إرجاع رموز الخطأ. لا تتجاهل أبداً استثناءً دون معالجته.</p>
+            
+            <h2>أدوات تساعدك على كتابة كود نظيف</h2>
+            <ul>
+                <li><strong>ESLint / Prettier:</strong> لتنسيق الكود تلقائياً في JavaScript.</li>
+                <li><strong>Black / Pylint:</strong> للكود النظيف في Python.</li>
+                <li><strong>SonarQube:</strong> لتحليل جودة الكود واكتشاف المشاكل.</li>
+                <li><strong>Pre-commit Hooks:</strong> لفحص الكود قبل رفعه إلى المستودع.</li>
+            </ul>
+            
+            <h2>خلاصة</h2>
+            <p>كتابة الكود النظيف هي مهارة تكتسب بالممارسة والمراجعة المستمرة. استثمر الوقت في تحسين جودة كودك، وستجني الثمار على المدى الطويل. في <strong class="gold-text">Axis Core</strong>، نضع الكود النظيف كأحد أولوياتنا الأساسية في كل مشروع.</p>
+        </div>
+        
+        <div class="whatsapp-contact">
+            <p><i class="fas fa-comment-dots"></i> هل تريد تحسين جودة كود مشروعك؟</p>
+            <p>فريق Axis Core يقدم استشارات مجانية حول أفضل ممارسات البرمجة</p>
+            <a href="https://wa.me/201554561706" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> راسلنا
+            </a>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="javascript:void(0)" class="back-to-blog" onclick="hideArticle()">
+                <i class="fas fa-arrow-right"></i> العودة إلى المدونة
+            </a>
+        </div>
     </div>
+
+    <footer><div class="container"><img src="logo.png" alt="Axis Core Logo" style="height:40px;margin-bottom:10px;"><p>&copy; 2026 جميع الحقوق محفوظة لشركة Axis Core</p></div></footer>
 </div>
 
-<!-- نافذة الوضع الليلي/النهاري -->
-<div id="themePopupOverlay" class="popup-overlay">
-    <div class="popup-content">
-        <i class="fas fa-adjust"></i>
-        <h3>🚧 قيد التطوير</h3>
-        <p>هذه الميزة قيد التطوير، سيتم إتاحتها في الإصدارات القادمة.</p>
-        <button class="popup-close" onclick="closeThemePopup()">حسنًا</button>
-    </div>
-</div>
+<div id="popupOverlay" class="popup-overlay"><div class="popup-content"><i class="fas fa-tools"></i><h3>جاري التجهيز</h3><p>المقال قيد الإعداد. سيتم نشره قريبًا. تابعونا!</p><button class="popup-close" onclick="closePopup()">حسنًا</button></div></div>
+<div id="worksPopupOverlay" class="popup-overlay"><div class="popup-content"><i class="fas fa-briefcase"></i><h3>أعمالنا قريبًا</h3><p>نستعد لعرض مشاريعنا المميزة. قريبًا جدًا ستجدون أعمالنا هنا. تابعونا!</p><button class="popup-close" onclick="closeWorksPopup()">حسنًا</button></div></div>
+<div id="langPopupOverlay" class="popup-overlay"><div class="popup-content"><i class="fas fa-language"></i><h3>🚧 قيد التطوير</h3><p>سيتم إضافة الترجمة إلى الإنجليزية قريبًا. شكرًا لصبرك!</p><button class="popup-close" onclick="closeLangPopup()">حسنًا</button></div></div>
+<div id="academyPopupOverlay" class="popup-overlay"><div class="popup-content"><i class="fas fa-graduation-cap"></i><h3>Axis Core Academy</h3><p>🚧 قيد التجهيز – سننطلق قريبًا لنقدم محتوى تدريبي متكامل في مجالات البرمجيات والهندسة التقنية. تابعونا!</p><button class="popup-close" onclick="closeAcademyPopup()">حسنًا</button></div></div>
 
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-<script src="script.js"></script>
+<button id="scrollToTopBtn" class="scroll-to-top"><i class="fas fa-arrow-up"></i></button>
+<a href="https://wa.me/201554561706" class="floating-btn" target="_blank"><i class="fab fa-whatsapp"></i><span>طلب استشارة تقنية</span></a>
+
 <script>
-    function showPopup() { document.getElementById('popupOverlay').style.display = 'flex'; }
-    function closePopup() { document.getElementById('popupOverlay').style.display = 'none'; }
-    function showWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'flex'; }
-    function closeWorksPopup() { document.getElementById('worksPopupOverlay').style.display = 'none'; }
-    function showLangPopup() { document.getElementById('langPopupOverlay').style.display = 'flex'; }
-    function closeLangPopup() { document.getElementById('langPopupOverlay').style.display = 'none'; }
-    function showAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'flex'; }
-    function closeAcademyPopup() { document.getElementById('academyPopupOverlay').style.display = 'none'; }
-    function showThemePopup() { document.getElementById('themePopupOverlay').style.display = 'flex'; }
-    function closeThemePopup() { document.getElementById('themePopupOverlay').style.display = 'none'; }
-    document.getElementById('popupOverlay').addEventListener('click', function(e) { if(e.target === this) closePopup(); });
-    document.getElementById('worksPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeWorksPopup(); });
-    document.getElementById('langPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeLangPopup(); });
-    document.getElementById('academyPopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeAcademyPopup(); });
-    document.getElementById('themePopupOverlay').addEventListener('click', function(e) { if(e.target === this) closeThemePopup(); });
+    const preloader=document.getElementById('preloader');
+    const siteContent=document.querySelector('.site-content');
+    const hasSeenPreloader=sessionStorage.getItem('preloaderShown');
+    if(preloader&&siteContent){
+        if(!hasSeenPreloader){
+            sessionStorage.setItem('preloaderShown','true');
+            setTimeout(()=>{preloader.style.opacity='0';setTimeout(()=>{preloader.style.display='none';siteContent.style.display='block';},500);},1500);
+        }else{preloader.style.display='none';siteContent.style.display='block';}
+    }
+
+    const hamburger=document.getElementById('hamburgerBtn');
+    const navLinks=document.getElementById('navLinks');
+    if(hamburger){hamburger.addEventListener('click',()=>navLinks.classList.toggle('show'));}
+
+    function showArticle(articleId) {
+        document.getElementById('blogSection').classList.add('hide');
+        document.getElementById(articleId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function hideArticle() {
+        document.getElementById('blogSection').classList.remove('hide');
+        document.getElementById('article1').classList.remove('active');
+        document.getElementById('article2').classList.remove('active');
+        document.getElementById('article3').classList.remove('active');
+        document.getElementById('article4').classList.remove('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showPopup(){document.getElementById('popupOverlay').style.display='flex';}
+    function closePopup(){document.getElementById('popupOverlay').style.display='none';}
+    function showWorksPopup(){document.getElementById('worksPopupOverlay').style.display='flex';}
+    function closeWorksPopup(){document.getElementById('worksPopupOverlay').style.display='none';}
+    function showLangPopup(){document.getElementById('langPopupOverlay').style.display='flex';}
+    function closeLangPopup(){document.getElementById('langPopupOverlay').style.display='none';}
+    function showAcademyPopup(){document.getElementById('academyPopupOverlay').style.display='flex';}
+    function closeAcademyPopup(){document.getElementById('academyPopupOverlay').style.display='none';}
+
+    document.getElementById('popupOverlay').addEventListener('click',function(e){if(e.target===this)closePopup();});
+    document.getElementById('worksPopupOverlay').addEventListener('click',function(e){if(e.target===this)closeWorksPopup();});
+    document.getElementById('langPopupOverlay').addEventListener('click',function(e){if(e.target===this)closeLangPopup();});
+    document.getElementById('academyPopupOverlay').addEventListener('click',function(e){if(e.target===this)closeAcademyPopup();});
+
+    const scrollBtn=document.getElementById('scrollToTopBtn');
+    window.addEventListener('scroll',()=>{scrollBtn.style.display=window.scrollY>300?'block':'none';});
+    scrollBtn.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});});
 </script>
 </body>
 </html>
